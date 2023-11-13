@@ -5,15 +5,19 @@ using UnityEngine.UIElements;
 
 public class FedeMovement : MonoBehaviour
 {
+    // Custom Game parameters
     [Header("Parameters")]
     [SerializeField] float movingForce = 35f;
-    [SerializeField] float jumpForce = 100f;
+    [SerializeField] float maxHorizontalSpeed = 10f;
+    [SerializeField] float jumpForce = 250f;
 
     // Constants
     private const float rotationAmount = -90f;
+    private const float groundDetectionDistance = 0.01f;
 
     // Physiscs elements
     private Rigidbody rb;
+    private BoxCollider bc;
 
     // Moving Direction
     private List<Vector3> Directions = new List<Vector3>() { new Vector3(1f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(-1f, 0f, 0f), new Vector3(0f, 0f, -1f) };
@@ -34,6 +38,7 @@ public class FedeMovement : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+        bc = gameObject.GetComponent<BoxCollider>();
         direction = Directions[directionIndex];
     }
 
@@ -42,12 +47,12 @@ public class FedeMovement : MonoBehaviour
     {
         // Get Input
         moveHorizontal = Input.GetAxis("Horizontal");
-        doJump = Input.GetKey(KeyCode.Space);
+        doJump = Input.GetKeyDown(KeyCode.Space);
         rotatePositive = Input.GetKeyDown(KeyCode.G);
         rotateNegative = Input.GetKeyDown(KeyCode.F);
 
         // Check grounded
-        // ...
+        isJumping = !IsGrounded();
 
         // Prepare Direction
         if (rotatePositive)  { ChangeDirection(1); }
@@ -57,6 +62,9 @@ public class FedeMovement : MonoBehaviour
         movingVector = PrepareStraightMove();
         movingVector += PrepareJump();
 
+        // Limit movement
+        LimitVelocity();
+
         // Do movement
         ApplyForce(movingVector);
 
@@ -65,6 +73,14 @@ public class FedeMovement : MonoBehaviour
     // Quick implementation of modulo operation
     private int Mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
     
+    private void LimitVelocity()
+    {
+        if (Mathf.Abs(rb.velocity.x) >= maxHorizontalSpeed)
+        {
+            movingVector.x = 0;
+        }
+    }
+
     private void ApplyForce(Vector3 direction)
     {
         rb.AddForce(direction);
@@ -87,15 +103,40 @@ public class FedeMovement : MonoBehaviour
 
         return jumpVector;
     }
+
     private void ChangeDirection(int way)
     {
         directionIndex = Mod(directionIndex + way, Directions.Count);
         direction = Directions[directionIndex];
-        RotateByAomunt(rotationAmount*way);
+        RotateByAmount(rotationAmount*way);
     }
-    private void RotateByAomunt(float amount)
+
+    private void RotateByAmount(float amount)
     {
         // Rotate the object around its up axis by the specified amount
         transform.Rotate(Vector3.up, amount);
     }
+
+    bool IsGrounded()
+    {
+        // Create a Raycast hit variable to store information about the hit
+        RaycastHit hit;
+
+        // Create a Ray from the center of the player downwards
+        Ray ray = new Ray(transform.position, Vector3.down);
+
+        // Adjust the raycast distance based on the player's height
+        float raycastDistance = bc.bounds.extents.y + groundDetectionDistance;
+
+        // Perform the Raycast
+        if (Physics.Raycast(ray, out hit, raycastDistance))
+        {
+            // If the Raycast hits something below the player, return true (player is grounded)
+            return true;
+        }
+
+        // If the Raycast doesn't hit anything below the player, return false (player is not grounded)
+        return false;
+    }
+
 }
