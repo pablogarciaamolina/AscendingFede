@@ -16,7 +16,7 @@ public class FedeMovement : MonoBehaviour
     private const float groundDetectionDistance = 0.01f;
 
     // Manager(s)
-    mvM MovementManager 
+    private MovementManager mvM;
 
     // Physiscs elements
     private Rigidbody rb;
@@ -28,10 +28,9 @@ public class FedeMovement : MonoBehaviour
     private Vector3 direction;
 
     // Moving Input
-    private float moveHorizontal;
-    private bool doJump;
-    private bool rotatePositive;
-    private bool rotateNegative;
+    private int moveHorizontal = 0f; // 1 for right, -1 for left. 0 no movement
+    private bool doJump = false;
+    private int rotateSense = 0f; // 1 for positive rotation, -1 for negative rotation. 0 no rotation
 
     //Movement variables
     private Vector3 movingVector;
@@ -40,8 +39,22 @@ public class FedeMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Obatain physic objects
         rb = gameObject.GetComponent<Rigidbody>();
         bc = gameObject.GetComponent<BoxCollider>();
+
+        // Get Manager(s) instance(s)
+        mvM = MovementManager.Instance
+
+        // Suscribe to movement orders (input derived)
+        /// Horizontal movement
+        mvM.HorizontalMovementEvent += SetMoveHorizontal
+        /// Jump movement
+        mvM.JumpMovementEvent += SetDoJump;
+        /// RotationMovement
+        mvM.RotationMovementEvent += SetRotate
+
+        // Initialize direction
         direction = Directions[directionIndex];
     }
 
@@ -49,17 +62,16 @@ public class FedeMovement : MonoBehaviour
     void Update()
     {
         // Get Input
-        moveHorizontal = Input.GetAxis("Horizontal");
-        doJump = Input.GetKeyDown(KeyCode.Space);
-        rotatePositive = Input.GetKeyDown(KeyCode.G);
-        rotateNegative = Input.GetKeyDown(KeyCode.F);
+        ///moveHorizontal = Input.GetAxis("Horizontal");
+        ///doJump = Input.GetKeyDown(KeyCode.Space);
+        ///rotatePositive = Input.GetKeyDown(KeyCode.G);
+        ///rotateNegative = Input.GetKeyDown(KeyCode.F);
 
         // Check grounded
         isJumping = !IsGrounded();
 
         // Prepare Direction
-        if (rotatePositive)  { ChangeDirection(1); }
-        if (rotateNegative) { ChangeDirection(-1); }
+        if (rotateSense)  { ChangeDirection(rotateSense); }
 
         // Prepare movement
         movingVector = PrepareStraightMove();
@@ -76,6 +88,21 @@ public class FedeMovement : MonoBehaviour
     // Quick implementation of modulo operation
     private int Mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
     
+    private void SetMoveHorizontal(int way)
+    {
+        moveHorizontal = way;
+    }
+
+    private void SetDoJump() 
+    {
+        doJump = true;
+    }
+
+    private void SetRotate(int way) 
+    {
+        rotateSense = way
+    }
+
     private void LimitVelocity()
     {
         if (Mathf.Abs(rb.velocity.x) >= maxHorizontalSpeed)
@@ -87,6 +114,7 @@ public class FedeMovement : MonoBehaviour
     private void ApplyForce(Vector3 direction)
     {
         rb.AddForce(direction);
+        moveHorizontal = 0;
     }
 
     private Vector3 PrepareStraightMove()
@@ -100,9 +128,9 @@ public class FedeMovement : MonoBehaviour
         if (doJump && !isJumping)
         {
             jumpVector += Vector3.up * jumpForce;
-            doJump = false;
             isJumping = true;
         }
+        isJumping = false;
 
         return jumpVector;
     }
@@ -112,6 +140,7 @@ public class FedeMovement : MonoBehaviour
         directionIndex = Mod(directionIndex + way, Directions.Count);
         direction = Directions[directionIndex];
         RotateByAmount(rotationAmount*way);
+        rotateSense = 0;
     }
 
     private void RotateByAmount(float amount)
