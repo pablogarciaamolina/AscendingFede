@@ -15,6 +15,9 @@ public class FedeMovement : MonoBehaviour
     private const float rotationAmount = -90f;
     private const float groundDetectionDistance = 0.01f;
 
+    // Manager(s)
+    mvM MovementManager 
+
     // Physiscs elements
     private Rigidbody rb;
     private BoxCollider bc;
