@@ -1,14 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< HEAD
-
-public class FedeMovement : MonoBehaviour
-{
-
-    [SerializeField] private Rigidbody rigidBody;
-
-=======
 using UnityEngine.UIElements;
 
 public class FedeMovement : MonoBehaviour
@@ -43,14 +35,10 @@ public class FedeMovement : MonoBehaviour
     //Movement variables
     private Vector3 movingVector;
     private bool isJumping;
->>>>>>> SMP-v.1.1
 
     // Start is called before the first frame update
     void Start()
     {
-<<<<<<< HEAD
-        
-=======
         // Obatain physic objects
         rb = gameObject.GetComponent<Rigidbody>();
         bc = gameObject.GetComponent<BoxCollider>();
@@ -68,36 +56,11 @@ public class FedeMovement : MonoBehaviour
 
         // Initialize direction
         direction = Directions[directionIndex];
->>>>>>> SMP-v.1.1
     }
 
     // Update is called once per frame
     void Update()
     {
-<<<<<<< HEAD
-        if (Input.GetKey(KeyCode.D)) 
-        {
-            MoveDirection(Vector3.right);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            MoveDirection(Vector3.left);
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            MoveDirection(Vector3.up);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            MoveDirection(Vector3.down);
-        }
-    }
-
-    private void MoveDirection(Vector3 direction)
-    {
-        transform.position += direction * Time.deltaTime;
-    }
-=======
         // Get Input
         ///moveHorizontal = Input.GetAxis("Horizontal");
         ///doJump = Input.GetKeyDown(KeyCode.Space);
@@ -208,5 +171,4 @@ public class FedeMovement : MonoBehaviour
         return false;
     }
 
->>>>>>> SMP-v.1.1
 }
