@@ -9,4 +9,8 @@ public static class Constants
     public const string INPUT_HORIZONTAL = "Horizontal";
     public const UnityEngine.KeyCode INPUT_POSITIVE_ROTATION = KeyCode.G;
     public const UnityEngine.KeyCode INPUT_NEGATIVE_ROTATION = KeyCode.F;
+
+    // Physics constants
+    public const float rotationAmount = -90f;
+    public const float groundDetectionDistance = 0.01f;
 }

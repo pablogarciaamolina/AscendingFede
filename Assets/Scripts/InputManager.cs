@@ -24,12 +24,35 @@ public class InputManager : GenericSingleton<InputManager>
         negativeRotationInput = Input.GetKeyDown(Constants.INPUT_NEGATIVE_ROTATION);
 
         // Events
-        if (horizontalInput > 0) { ToMove.Invoke(1); }
-        else if (horizontalInput < 0) { ToMove.Invoke(-1); }
+        /// Horizontal input
+        if (horizontalInput > 0)
+        {
+            ToMove.Invoke(1);
+        }
+        else if (horizontalInput < 0)
+        {
+            ToMove.Invoke(-1);
+        }
 
-        if (jumpInput) { ToJump.Invoke(); }
+        /// jumping input
+        if (jumpInput)
+        {
+            ToJump.Invoke();
+        }
 
-        if (positiveRotationInput) { ToRotate.Invoke(1); }
-        else if (negativeRotationInput) { ToRotate.Invoke(-1); }
+        /// Ratation input
+        if (positiveRotationInput)
+        {
+            ToRotate.Invoke(1);
+            Debug.Log("Rotate right");
+
+        }
+        else if (negativeRotationInput)
+        {
+            ToRotate.Invoke(-1);
+            Debug.Log("Rotate left");
+
+        }
     }
+    
 }

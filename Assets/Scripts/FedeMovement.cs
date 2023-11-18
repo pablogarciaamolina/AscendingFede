@@ -7,13 +7,9 @@ public class FedeMovement : MonoBehaviour
 {
     // Custom Game parameters
     [Header("Parameters")]
-    [SerializeField] float movingForce = 35f;
-    [SerializeField] float maxHorizontalSpeed = 10f;
-    [SerializeField] float jumpForce = 250f;
-
-    // Constants
-    private const float rotationAmount = -90f;
-    private const float groundDetectionDistance = 0.01f;
+    [SerializeField] float movingForce = 200f;
+    [SerializeField] float maxHorizontalSpeed = 12f;
+    [SerializeField] float jumpForce = 1700f;
 
     // Manager(s)
     private MovementManager mvM;
@@ -28,9 +24,9 @@ public class FedeMovement : MonoBehaviour
     private Vector3 direction;
 
     // Moving Input
-    private int moveHorizontal = 0f; // 1 for right, -1 for left. 0 no movement
+    private int moveHorizontal = 0; // 1 for right, -1 for left. 0 no movement
     private bool doJump = false;
-    private int rotateSense = 0f; // 1 for positive rotation, -1 for negative rotation. 0 no rotation
+    private int rotateSense = 0; // 1 for positive rotation, -1 for negative rotation. 0 no rotation
 
     //Movement variables
     private Vector3 movingVector;
@@ -44,15 +40,15 @@ public class FedeMovement : MonoBehaviour
         bc = gameObject.GetComponent<BoxCollider>();
 
         // Get Manager(s) instance(s)
-        mvM = MovementManager.Instance
+        mvM = MovementManager.Instance;
 
         // Suscribe to movement orders (input derived)
         /// Horizontal movement
-        mvM.HorizontalMovementEvent += SetMoveHorizontal
+        mvM.HorizontalMovementEvent += SetMoveHorizontal;
         /// Jump movement
         mvM.JumpMovementEvent += SetDoJump;
         /// RotationMovement
-        mvM.RotationMovementEvent += SetRotate
+        mvM.RotationMovementEvent += SetRotate;
 
         // Initialize direction
         direction = Directions[directionIndex];
@@ -61,17 +57,12 @@ public class FedeMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Get Input
-        ///moveHorizontal = Input.GetAxis("Horizontal");
-        ///doJump = Input.GetKeyDown(KeyCode.Space);
-        ///rotatePositive = Input.GetKeyDown(KeyCode.G);
-        ///rotateNegative = Input.GetKeyDown(KeyCode.F);
-
+        
         // Check grounded
         isJumping = !IsGrounded();
 
         // Prepare Direction
-        if (rotateSense)  { ChangeDirection(rotateSense); }
+        if (rotateSense != 0)  { ChangeDirection(rotateSense); }
 
         // Prepare movement
         movingVector = PrepareStraightMove();
@@ -100,7 +91,7 @@ public class FedeMovement : MonoBehaviour
 
     private void SetRotate(int way) 
     {
-        rotateSense = way
+        rotateSense = way;
     }
 
     private void LimitVelocity()
@@ -108,6 +99,10 @@ public class FedeMovement : MonoBehaviour
         if (Mathf.Abs(rb.velocity.x) >= maxHorizontalSpeed)
         {
             movingVector.x = 0;
+        }
+        else if (Mathf.Abs(rb.velocity.z) >= maxHorizontalSpeed)
+        {
+            movingVector.z = 0;
         }
     }
 
@@ -130,7 +125,7 @@ public class FedeMovement : MonoBehaviour
             jumpVector += Vector3.up * jumpForce;
             isJumping = true;
         }
-        isJumping = false;
+        doJump = false;
 
         return jumpVector;
     }
@@ -139,7 +134,7 @@ public class FedeMovement : MonoBehaviour
     {
         directionIndex = Mod(directionIndex + way, Directions.Count);
         direction = Directions[directionIndex];
-        RotateByAmount(rotationAmount*way);
+        RotateByAmount(Constants.rotationAmount*way);
         rotateSense = 0;
     }
 
@@ -158,7 +153,7 @@ public class FedeMovement : MonoBehaviour
         Ray ray = new Ray(transform.position, Vector3.down);
 
         // Adjust the raycast distance based on the player's height
-        float raycastDistance = bc.bounds.extents.y + groundDetectionDistance;
+        float raycastDistance = bc.bounds.extents.y + Constants.groundDetectionDistance;
 
         // Perform the Raycast
         if (Physics.Raycast(ray, out hit, raycastDistance))

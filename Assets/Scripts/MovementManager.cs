@@ -7,7 +7,7 @@ public class MovementManager : GenericSingleton<MovementManager>
 {
     // Manager(s) instances
     private InputManager ipM;
-    private EnvironmentManager eM;
+    ////private EnvironmentManager eM;
 
     // Events
     public event Action<int> HorizontalMovementEvent;
@@ -21,7 +21,7 @@ public class MovementManager : GenericSingleton<MovementManager>
 
         // Obtain Manger(s) istances
         ipM = InputManager.Instance;
-        eM = EnvironmentManager.Instance;
+        ////eM = EnvironmentManager.Instance;
 
         // Suscribe to Input events
         /// Horizontal input
