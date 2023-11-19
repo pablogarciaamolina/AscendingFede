@@ -31,6 +31,7 @@ public class FedeMovement : MonoBehaviour
     //Movement variables
     private Vector3 movingVector;
     private bool isJumping;
+    private bool blockedRotation = false;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +50,8 @@ public class FedeMovement : MonoBehaviour
         mvM.JumpMovementEvent += SetDoJump;
         /// RotationMovement
         mvM.RotationMovementEvent += SetRotate;
+        mvM.BlockRotation += SetBlockRotation;
+        mvM.UnblockRotation += SetUnblockRotation;
 
         // Initialize direction
         direction = Directions[directionIndex];
@@ -62,7 +65,7 @@ public class FedeMovement : MonoBehaviour
         isJumping = !IsGrounded();
 
         // Prepare Direction
-        if (rotateSense != 0)  { ChangeDirection(rotateSense); }
+        if (rotateSense != 0 && !blockedRotation)  { ChangeDirection(rotateSense); }
 
         // Prepare movement
         movingVector = PrepareStraightMove();
@@ -92,6 +95,16 @@ public class FedeMovement : MonoBehaviour
     private void SetRotate(int way) 
     {
         rotateSense = way;
+    }
+
+    private void SetBlockRotation()
+    {
+        blockedRotation = true;
+    }
+
+    private void SetUnblockRotation()
+    {
+        blockedRotation = false;
     }
 
     private void LimitVelocity()

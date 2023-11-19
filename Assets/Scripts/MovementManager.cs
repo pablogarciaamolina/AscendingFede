@@ -9,10 +9,16 @@ public class MovementManager : GenericSingleton<MovementManager>
     private InputManager ipM;
     ////private EnvironmentManager eM;
 
+    // Camera
+    private GameObject Camera;
+    private CameraSwitcher cameraSwitcher;
+
     // Events
     public event Action<int> HorizontalMovementEvent;
     public event Action JumpMovementEvent;
     public event Action<int> RotationMovementEvent;
+    public event Action BlockRotation;
+    public event Action UnblockRotation;
 
 
     public override void Awake()
@@ -23,6 +29,10 @@ public class MovementManager : GenericSingleton<MovementManager>
         ipM = InputManager.Instance;
         ////eM = EnvironmentManager.Instance;
 
+        // Obtain Camera
+        Camera = GameObject.Find("Camera");
+        cameraSwitcher = Camera.GetComponent<CameraSwitcher>();
+
         // Suscribe to Input events
         /// Horizontal input
         ipM.ToMove += HorizontalInputEvent;
@@ -30,6 +40,9 @@ public class MovementManager : GenericSingleton<MovementManager>
         ipM.ToJump += JumpInputEvent;
         /// Rotattion input
         ipM.ToRotate += RotationInputEvent;
+        cameraSwitcher.StartRotation += CameraStartRotating;
+        cameraSwitcher.EndRotation += CameraDoneRotating;
+
     }
 
     // Update is called once per frame
@@ -51,6 +64,16 @@ public class MovementManager : GenericSingleton<MovementManager>
     private void RotationInputEvent(int way)
     {
         RotationMovementEvent(way);
+    }
+
+    public void CameraStartRotating()
+    {
+        BlockRotation.Invoke();
+    }
+
+    public void CameraDoneRotating()
+    {
+        UnblockRotation.Invoke();
     }
 
 }

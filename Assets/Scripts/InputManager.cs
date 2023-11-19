@@ -44,14 +44,10 @@ public class InputManager : GenericSingleton<InputManager>
         if (positiveRotationInput)
         {
             ToRotate.Invoke(1);
-            Debug.Log("Rotate right");
-
         }
         else if (negativeRotationInput)
         {
             ToRotate.Invoke(-1);
-            Debug.Log("Rotate left");
-
         }
     }
     
