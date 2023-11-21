@@ -120,7 +120,7 @@ public class EnvorinmentManger : GenericSingleton<EnvorinmentManger>
                     }
                 }
             }
-            // move player to that position
+            // move player to that position playerposition
                    
         }
     }
@@ -162,8 +162,6 @@ public class EnvorinmentManger : GenericSingleton<EnvorinmentManger>
                 sc.ColisionExit += NotOnInvisibleCube;
             }
         }
-        
-    
     }
 
     private void createRayGrid()
