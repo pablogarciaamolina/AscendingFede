@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: b6a6b60eef1666040a8018ccc5b79eca
+=======
+<<<<<<< HEAD
+guid: dc451324ec4926e47ae39b013ba5e139
+=======
+guid: f7f696e6133897e4ba50694e38a2f4a8
+>>>>>>> SMP-v.1.1
+>>>>>>> a307c0f1dcab5c3ca65e7d4da47a09e2a5b53b1d
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
