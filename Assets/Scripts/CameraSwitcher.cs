@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -9,7 +11,6 @@ public class CameraSwitcher : MonoBehaviour
 
     private MovementManager mvM;
     
-    private int currentIndex = 0;
     private bool isRotating = false;
     private float rotationTime = 0.5f;
 
@@ -18,72 +19,82 @@ public class CameraSwitcher : MonoBehaviour
 
     void Awake()
     {
+        // Initialize position
+        SetInitialPosition();
+
         // Get MovementManager
         mvM = MovementManager.Instance;
 
         // Suscribe to rotation event
         mvM.RotationMovementEvent += RotationInput;
 
-        // Set the initial position and rotation of the camera.
-        SetCamera(currentIndex);
+        // Suscribe to event to change the height
+        mvM.CharacterChangeOfLevel += ChangeLevel;
+
     }
 
-    private void StartTransition(int newIndex)
+    private void SetInitialPosition()
     {
-        currentIndex = Mod(newIndex, Constants.CameraUnitaryPositions.Length);
-        StartCoroutine(TransitionCamera());
+        transform.position = new Vector3(Constants.Center.x, Constants.playerInitialPosition.y + Constants.upCameraDistance, Constants.Center.z);
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
-    IEnumerator TransitionCamera()
+    IEnumerator Pivot(int sense)
     {
         isRotating = true;
         StartRotation.Invoke();
-        float elapsedTime = 0f;
 
-        // Position to transist between
-        Vector3 initialPosition = transform.position;
-        Vector3 targetPosition = Constants.CameraUnitaryPositions[currentIndex] * Constants.deepCameraDistance;
-        targetPosition.y = Constants.upCameraDistance;
+        Debug.Log(transform.rotation.eulerAngles);
 
         // Rotations to transist between
+        /// initial
         Quaternion initialRotation = transform.rotation;
-        Quaternion targetRotation = Quaternion.Euler(Constants.CameraRotations[currentIndex]);
+        /// target
+        float degree = initialRotation.eulerAngles.y + sense * Constants.rotationAmount;
+        Quaternion targetRotation = Quaternion.Euler(0, degree, 0);
 
+        float elapsedTime = 0f;
         while (elapsedTime < rotationTime)
         {
-            transform.position = Vector3.Slerp(initialPosition, targetPosition, elapsedTime / rotationTime);
-            transform.rotation = Quaternion.Lerp(initialRotation, targetRotation, elapsedTime / rotationTime);
+            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationTime);
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        SetCamera(currentIndex);
         isRotating = false;
         EndRotation.Invoke();
     }
 
-    private void SetCamera(int index)
+    IEnumerator TransitionToLevel(float newLevel)
     {
-        // Set position
-        transform.position = Constants.CameraUnitaryPositions[currentIndex] * Constants.deepCameraDistance;
-        transform.position +=  Vector3.up * Constants.upCameraDistance;
+        float elapsedTime = 0f;
 
-        // Set rotation
-        transform.eulerAngles = Constants.CameraRotations[index];
+        // Position to transist between
+        Vector3 initialPosition = transform.position;
+        Vector3 targetPosition = new Vector3(transform.position.x, newLevel, transform.position.z);
 
+        while (elapsedTime < rotationTime)
+        {
+            transform.position = Vector3.Slerp(initialPosition, targetPosition, elapsedTime / rotationTime);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+
+    private void ChangeLevel(float newHeight)
+    {
+        StartCoroutine(TransitionToLevel(newHeight + Constants.upCameraDistance));
     }
 
     private void RotationInput(int way)
     {
         if (!isRotating) 
         {
-            StartTransition(currentIndex + way);
+            StartCoroutine(Pivot(way));
         }
     }
 
-    private int Mod(int x, int m)
-    {
-        return (x % m + m) % m;
-    }
 }

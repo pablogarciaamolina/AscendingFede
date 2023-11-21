@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,7 +11,7 @@ public class FedeMovement : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] float movingForce = 200f;
     [SerializeField] float maxHorizontalSpeed = 12f;
-    [SerializeField] float jumpForce = 1700f;
+    [SerializeField] float jumpForce = 2500f;
 
     // Manager(s)
     private MovementManager mvM;
@@ -25,7 +27,6 @@ public class FedeMovement : MonoBehaviour
     private int lookingTo = 1; // 1 to look right, -1 to look left
 
     // Moving Direction
-    private List<Vector3> Directions = new List<Vector3>() { new Vector3(1f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(-1f, 0f, 0f), new Vector3(0f, 0f, -1f) };
     private int directionIndex = 0;
     private Vector3 direction;
 
@@ -38,10 +39,17 @@ public class FedeMovement : MonoBehaviour
     private Vector3 movingVector;
     private bool isJumping;
     private bool blockedRotation = false;
+    private float actualHeight; // Useful to determine if the level (grounded height) changes
+
+    // EVENTS
+    public event Action<float> LevelChangedEvent;
 
     // Start is called before the first frame update
     void Start()
     {
+        // Intialize position
+        transform.position = Constants.playerInitialPosition;
+
         // Obatain physic objects
         rb = gameObject.GetComponent<Rigidbody>();
         cc = gameObject.GetComponent<CapsuleCollider>();
@@ -59,8 +67,14 @@ public class FedeMovement : MonoBehaviour
         mvM.BlockRotation += SetBlockRotation;
         mvM.UnblockRotation += SetUnblockRotation;
 
+        // Set suscriptions to events of this class
+        LevelChangedEvent += mvM.ManageCharacterLevelChange;
+
         // Initialize direction
-        direction = Directions[directionIndex];
+        direction = Constants.Directions[directionIndex];
+
+        // Other initialization of variables
+        actualHeight = transform.position.y;
     }
 
     // Update is called once per frame
@@ -69,6 +83,9 @@ public class FedeMovement : MonoBehaviour
         
         // Check grounded
         isJumping = !IsGrounded();
+
+        // Check level
+        if (!isJumping && actualHeight != transform.position.y) { ChangeOfLevel(); }
 
         // Prepare Direction
         if (rotateSense != 0 && !blockedRotation)  { ChangeDirection(rotateSense); }
@@ -194,8 +211,8 @@ public class FedeMovement : MonoBehaviour
 
     private void ChangeDirection(int way)
     {
-        directionIndex = Mod(directionIndex + way, Directions.Count);
-        direction = Directions[directionIndex];
+        directionIndex = Mod(directionIndex + way, Constants.Directions.Count);
+        direction = Constants.Directions[directionIndex];
         RotateByAmount(Constants.rotationAmount*way);
         rotateSense = 0;
     }
@@ -226,6 +243,12 @@ public class FedeMovement : MonoBehaviour
 
         // If the Raycast doesn't hit anything below the player, return false (player is not grounded)
         return false;
+    }
+
+    private void ChangeOfLevel()
+    {
+        actualHeight = transform.position.y;
+        LevelChangedEvent.Invoke(actualHeight);
     }
 
 }

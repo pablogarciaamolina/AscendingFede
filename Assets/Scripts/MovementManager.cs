@@ -19,6 +19,7 @@ public class MovementManager : GenericSingleton<MovementManager>
     public event Action<int> RotationMovementEvent;
     public event Action BlockRotation;
     public event Action UnblockRotation;
+    public event Action<float> CharacterChangeOfLevel;
 
 
     public override void Awake()
@@ -76,4 +77,8 @@ public class MovementManager : GenericSingleton<MovementManager>
         UnblockRotation.Invoke();
     }
 
+    public void ManageCharacterLevelChange(float newLevel)
+    {
+        CharacterChangeOfLevel.Invoke(newLevel);
+    }
 }
