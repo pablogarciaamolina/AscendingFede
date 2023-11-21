@@ -16,7 +16,13 @@ public class FedeMovement : MonoBehaviour
 
     // Physiscs elements
     private Rigidbody rb;
-    private BoxCollider bc;
+    private CapsuleCollider cc;
+
+    // Animation elements
+    public AnimationClip _walk, _jump;
+    public Animation _Legs;
+    private bool doAnimateJump = false;
+    private int lookingTo = 1; // 1 to look right, -1 to look left
 
     // Moving Direction
     private List<Vector3> Directions = new List<Vector3>() { new Vector3(1f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(-1f, 0f, 0f), new Vector3(0f, 0f, -1f) };
@@ -38,7 +44,7 @@ public class FedeMovement : MonoBehaviour
     {
         // Obatain physic objects
         rb = gameObject.GetComponent<Rigidbody>();
-        bc = gameObject.GetComponent<BoxCollider>();
+        cc = gameObject.GetComponent<CapsuleCollider>();
 
         // Get Manager(s) instance(s)
         mvM = MovementManager.Instance;
@@ -67,9 +73,14 @@ public class FedeMovement : MonoBehaviour
         // Prepare Direction
         if (rotateSense != 0 && !blockedRotation)  { ChangeDirection(rotateSense); }
 
+
         // Prepare movement
         movingVector = PrepareStraightMove();
         movingVector += PrepareJump();
+
+        // Set animation
+        Animate();
+        CheckLookingDirection();
 
         // Limit movement
         LimitVelocity();
@@ -122,12 +133,19 @@ public class FedeMovement : MonoBehaviour
     private void ApplyForce(Vector3 direction)
     {
         rb.AddForce(direction);
-        moveHorizontal = 0;
     }
 
     private Vector3 PrepareStraightMove()
     {
-        return direction * moveHorizontal * movingForce;
+        if (!isJumping)
+        {   
+            return direction * moveHorizontal * movingForce;
+        }
+        else
+        {
+            return Vector3.zero;
+        }
+        
     }
 
     private Vector3 PrepareJump()
@@ -137,10 +155,41 @@ public class FedeMovement : MonoBehaviour
         {
             jumpVector += Vector3.up * jumpForce;
             isJumping = true;
+            doAnimateJump = true;
         }
         doJump = false;
 
         return jumpVector;
+    }
+
+    private void Animate()
+    {
+        
+        if (doAnimateJump)
+        {
+            _Legs.Stop();
+            _Legs.clip = _jump;
+            _Legs.Play();
+            doAnimateJump = false;
+        }
+        else if ((!isJumping) && (moveHorizontal != 0))
+        {
+            _Legs.clip = _walk;
+            _Legs.Play();
+        }
+
+    }
+
+    private void CheckLookingDirection()
+    {
+        if (moveHorizontal != lookingTo)
+        {
+            if (moveHorizontal != 0)
+            {
+                RotateByAmount(180);
+                lookingTo = moveHorizontal;
+            }
+        }
     }
 
     private void ChangeDirection(int way)
@@ -166,7 +215,7 @@ public class FedeMovement : MonoBehaviour
         Ray ray = new Ray(transform.position, Vector3.down);
 
         // Adjust the raycast distance based on the player's height
-        float raycastDistance = bc.bounds.extents.y + Constants.groundDetectionDistance;
+        float raycastDistance = cc.bounds.extents.y + Constants.groundDetectionDistance;
 
         // Perform the Raycast
         if (Physics.Raycast(ray, out hit, raycastDistance))

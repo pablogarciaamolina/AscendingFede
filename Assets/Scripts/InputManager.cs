@@ -33,6 +33,10 @@ public class InputManager : GenericSingleton<InputManager>
         {
             ToMove.Invoke(-1);
         }
+        else
+        {
+            ToMove.Invoke(0);
+        }
 
         /// jumping input
         if (jumpInput)
