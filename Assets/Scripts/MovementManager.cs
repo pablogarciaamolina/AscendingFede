@@ -44,6 +44,11 @@ public class MovementManager : GenericSingleton<MovementManager>
         cameraSwitcher.StartRotation += CameraStartRotating;
         cameraSwitcher.EndRotation += CameraDoneRotating;
 
+        // Suscrbibe to Movement events
+        PowerUpManager.DoubleJumpPickedUp += DoubleJumpPickedUpEvent;
+        PowerUpManager.HeavyBootsPickedUp += HeavyBootsPickedUpEvent;
+        PowerUpManager.ArmorPickedUp += ArmorPickedUpEvent;
+
     }
 
     // Update is called once per frame
@@ -80,5 +85,20 @@ public class MovementManager : GenericSingleton<MovementManager>
     public void ManageCharacterLevelChange(float newLevel)
     {
         CharacterChangeOfLevel.Invoke(newLevel);
+    }
+
+    private void DoubleJumpPickedUpEvent()
+    {
+        JumpMovementEvent += DoubleJumpMovementEvent;
+    }
+
+    private void HeavyBootsPickedUpEvent()
+    {
+        HorizontalMovementEvent += HeavyBootsMovementEvent;
+    }
+
+    private void ArmorPickedUpEvent()
+    {
+        JumpMovementEvent += ArmorMovementEvent;
     }
 }
