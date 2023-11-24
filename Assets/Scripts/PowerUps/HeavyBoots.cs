@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeavyBoots : MonoBehaviour
+public class HeavyBoots : GenericPowerUp
 {
     
     public event System.Action HeavyBootsPickedUp;
