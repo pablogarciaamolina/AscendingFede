@@ -10,7 +10,6 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
     [SerializeField] private GameObject InvisibleCube;
     [SerializeField] private Transform playableEnvironment; // places where you can step ( idealy a block ) 
     [SerializeField] private Transform unplayableEnvironment; // tower
-    [SerializeField] private Camera cam;
 
     private bool StandingOnInvisibleCube;
     private List<Transform> InvisibleList = new List<Transform>();

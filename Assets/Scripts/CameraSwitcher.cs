@@ -44,10 +44,6 @@ public class CameraSwitcher : MonoBehaviour
         isRotating = true;
         StartRotation.Invoke();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> SNDB-v2
         // Rotations to transist between
         /// initial
         Quaternion initialRotation = transform.rotation;
