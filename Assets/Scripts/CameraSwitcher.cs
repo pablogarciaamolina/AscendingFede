@@ -44,19 +44,23 @@ public class CameraSwitcher : MonoBehaviour
         isRotating = true;
         StartRotation.Invoke();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> SNDB-v2
         // Rotations to transist between
         /// initial
         Quaternion initialRotation = transform.rotation;
         /// target
         float degree = initialRotation.eulerAngles.y + sense * Constants.rotationAmount;
         Quaternion targetRotation = Quaternion.Euler(0, degree, 0);
-
+      
         float elapsedTime = 0f;
-        while (elapsedTime < rotationTime)
+        while (elapsedTime <= rotationTime)
         {
             transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationTime);
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += 0.005f;
             yield return null;
         }
 

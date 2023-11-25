@@ -15,6 +15,7 @@ public class FedeMovement : MonoBehaviour
 
     // Manager(s)
     private MovementManager mvM;
+    private EnvironmentManager eM;
 
     // Physiscs elements
     private Rigidbody rb;
@@ -43,6 +44,7 @@ public class FedeMovement : MonoBehaviour
 
     // EVENTS
     public event Action<float> LevelChangedEvent;
+    public event Action<Vector3> SideChangeEvent;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +58,7 @@ public class FedeMovement : MonoBehaviour
 
         // Get Manager(s) instance(s)
         mvM = MovementManager.Instance;
+        eM = EnvironmentManager.Instance;
 
         // Suscribe to movement orders (input derived)
         /// Horizontal movement
@@ -66,15 +69,20 @@ public class FedeMovement : MonoBehaviour
         mvM.RotationMovementEvent += SetRotate;
         mvM.BlockRotation += SetBlockRotation;
         mvM.UnblockRotation += SetUnblockRotation;
+        // player depth movement
+        eM.SendPositionEvent += SendPosition;
+        eM.setPlayertoBlock += SetPlayerDepth;
 
         // Set suscriptions to events of this class
         LevelChangedEvent += mvM.ManageCharacterLevelChange;
+        SideChangeEvent += eM.ManageSideChange;
 
         // Initialize direction
         direction = Constants.Directions[directionIndex];
 
         // Other initialization of variables
         actualHeight = transform.position.y;
+
     }
 
     // Update is called once per frame
@@ -125,6 +133,11 @@ public class FedeMovement : MonoBehaviour
         rotateSense = way;
     }
 
+    private void SendPosition()
+    {
+        SideChangeEvent.Invoke(this.transform.position);
+    }
+
     private void SetBlockRotation()
     {
         blockedRotation = true;
@@ -154,15 +167,8 @@ public class FedeMovement : MonoBehaviour
 
     private Vector3 PrepareStraightMove()
     {
-        if (!isJumping)
-        {   
-            return direction * moveHorizontal * movingForce;
-        }
-        else
-        {
-            return Vector3.zero;
-        }
-        
+
+        return direction * moveHorizontal * movingForce;
     }
 
     private Vector3 PrepareJump()
@@ -249,6 +255,11 @@ public class FedeMovement : MonoBehaviour
     {
         actualHeight = transform.position.y;
         LevelChangedEvent.Invoke(actualHeight);
+    }
+
+    private void SetPlayerDepth(Vector3 position)
+    {
+        transform.position = position;
     }
 
 }
