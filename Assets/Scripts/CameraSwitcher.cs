@@ -44,8 +44,6 @@ public class CameraSwitcher : MonoBehaviour
         isRotating = true;
         StartRotation.Invoke();
 
-        Debug.Log(transform.rotation.eulerAngles);
-
         // Rotations to transist between
         /// initial
         Quaternion initialRotation = transform.rotation;

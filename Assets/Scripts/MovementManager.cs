@@ -22,6 +22,7 @@ public class MovementManager : GenericSingleton<MovementManager>
     public event Action<float> CharacterChangeOfLevel;
 
 
+
     public override void Awake()
     {
         base.Awake();
