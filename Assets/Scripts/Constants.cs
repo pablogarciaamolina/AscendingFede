@@ -23,7 +23,7 @@ public static class Constants
     public static List<Vector3> Directions = new List<Vector3>() { new Vector3(1f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(-1f, 0f, 0f), new Vector3(0f, 0f, -1f) };
 
     // Camera constants
-    public const float deepCameraDistance = 30f;
+    public const float deepCameraDistance = 50f;
     public const float upCameraDistance = 2f;
 
 }

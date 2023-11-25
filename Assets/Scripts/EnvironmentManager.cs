@@ -213,19 +213,19 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
         {
             for (int j = -10; j < max_height; j += 1)
             {
-                Vector3 coord = new Vector3(i, j, -2*max_width -35);
+                Vector3 coord = new Vector3(i, j, -2*max_width);
                 Ray ray = new Ray(coord, new Vector3(0f, 0f, 1f));
                 setVisibleEnvironment(ray,0);
 
-                coord = new Vector3(-2*max_width-35, j, i +35);
+                coord = new Vector3(-2*max_width, j, i);
                 ray = new Ray(coord, new Vector3(1f, 0f, 0f));
                 setVisibleEnvironment(ray,3);
 
-                coord = new Vector3(i, j, 2*max_width+35);
+                coord = new Vector3(i, j, 2*max_width);
                 ray = new Ray(coord, new Vector3(0f, 0f, -1f));
                 setVisibleEnvironment(ray,2);
 
-                coord = new Vector3(2*max_width+35, j, i + 35);
+                coord = new Vector3(2*max_width, j, i);
                 ray = new Ray(coord, new Vector3(-1f, 0f, 0f));
                 setVisibleEnvironment(ray,1);
             }
