@@ -14,11 +14,11 @@ public static class Constants
     // Physics constants
     public const int rotationAmount = -90;
     public const float groundDetectionDistance = 0.01f;
-    public static Vector3 Center = new Vector3(0f, 0f, 0f);
+    public static Vector3 Center = new Vector3(0f, 0f, 35f);
 
     // Player contants
     /// Initial status
-    public static Vector3 playerInitialPosition = new Vector3(0f, 4f, 0f);
+    public static Vector3 playerInitialPosition = new Vector3(0f, 5f, 15f);
     /// Movements constants
     public static List<Vector3> Directions = new List<Vector3>() { new Vector3(1f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(-1f, 0f, 0f), new Vector3(0f, 0f, -1f) };
 

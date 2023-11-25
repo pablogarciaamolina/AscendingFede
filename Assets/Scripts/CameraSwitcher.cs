@@ -44,7 +44,6 @@ public class CameraSwitcher : MonoBehaviour
         isRotating = true;
         StartRotation.Invoke();
 
-        Debug.Log(transform.rotation.eulerAngles);
 
         // Rotations to transist between
         /// initial
@@ -52,13 +51,13 @@ public class CameraSwitcher : MonoBehaviour
         /// target
         float degree = initialRotation.eulerAngles.y + sense * Constants.rotationAmount;
         Quaternion targetRotation = Quaternion.Euler(0, degree, 0);
-
+      
         float elapsedTime = 0f;
-        while (elapsedTime < rotationTime)
+        while (elapsedTime <= rotationTime)
         {
             transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationTime);
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += 0.005f;
             yield return null;
         }
 
