@@ -19,7 +19,7 @@ public class FedeMovement : MonoBehaviour
 
     // Physiscs elements
     private Rigidbody rb;
-    private CapsuleCollider cc;
+    private BoxCollider cc;
 
     // Animation elements
     public AnimationClip _walk, _jump;
@@ -54,7 +54,7 @@ public class FedeMovement : MonoBehaviour
 
         // Obatain physic objects
         rb = gameObject.GetComponent<Rigidbody>();
-        cc = gameObject.GetComponent<CapsuleCollider>();
+        cc = gameObject.GetComponent<BoxCollider>();
 
         // Get Manager(s) instance(s)
         mvM = MovementManager.Instance;

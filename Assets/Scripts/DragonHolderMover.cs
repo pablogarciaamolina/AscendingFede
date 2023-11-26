@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class DragonHolderMover : MonoBehaviour
 {
+    private MovementManager mvM;
 
-    private float rotationSpeed = 5f;
-    private float multiplierTimeRotatingInOneSense= 1;
 
     private bool rotating = false;
     private float timeRotatingInOneSense;
@@ -15,9 +14,13 @@ public class DragonHolderMover : MonoBehaviour
     private int sense = 1;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        timeRotatingInOneSense = Random.Range(0, multiplierTimeRotatingInOneSense);
+        mvM = MovementManager.Instance;
+        timeRotatingInOneSense = Random.Range(0, Constants.multiplierTimeRotatingInOneSense);
+
+        // Suscribe to event to change the height
+        mvM.CharacterChangeOfLevel += ChangeLevel;
     }
 
 // Update is called once per frame
@@ -37,7 +40,7 @@ void Update()
         {
             sense *= -1;
             currentTime = 0f;
-            timeRotatingInOneSense = Random.Range(0, multiplierTimeRotatingInOneSense);
+            timeRotatingInOneSense = Random.Range(0, Constants.multiplierTimeRotatingInOneSense);
         }
     }
 
@@ -53,9 +56,9 @@ void Update()
         Quaternion targetRotation = Quaternion.Euler(0, degree, 0);
 
         float elapsedTime = 0f;
-        while (elapsedTime < rotationSpeed)
+        while (elapsedTime < Constants.rotationSpeed)
         {
-            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationSpeed);
+            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / Constants.rotationSpeed);
 
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -63,6 +66,35 @@ void Update()
 
         rotating = false;
 
+    }
+
+    IEnumerator TransitionToLevel(float newLevel)
+    {
+
+        // Positions to transist between
+        /// initial
+        float initialHeight = transform.position.y;
+        /// target
+        float targetHeight = newLevel;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < Constants.UpDownTime)
+        {
+            Vector3 initPosition = transform.position;
+            initPosition.y = initialHeight;
+            Vector3 finalPosition = transform.position;
+            finalPosition.y = targetHeight;
+
+            transform.position = Vector3.Lerp(initPosition, finalPosition, elapsedTime / Constants.UpDownTime);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private void ChangeLevel(float newHeight)
+    {
+        StartCoroutine(TransitionToLevel(newHeight + Constants.flyingHeightAboveCharacter));
     }
 
 }

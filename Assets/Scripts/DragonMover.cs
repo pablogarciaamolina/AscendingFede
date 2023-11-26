@@ -6,10 +6,8 @@ public class DragonMover : MonoBehaviour
 {
     // Animation elements
     private Animator _animator;
-
-    // Movement const
-    private float distanceUpDownFromCenter = 1f;
-    private float UpDownTime = 2f;
+    
+    
 
 
     private int way = 1; // 1 Up, -1 Down
@@ -41,17 +39,17 @@ public class DragonMover : MonoBehaviour
         /// initial
         float initialHeight = transform.position.y;
         /// target
-        float targetHeight = transform.position.y + way * distanceUpDownFromCenter;
+        float targetHeight = transform.position.y + way * Constants.distanceUpDownFromCenter;
 
         float elapsedTime = 0f;
-        while (elapsedTime < UpDownTime)
+        while (elapsedTime < Constants.UpDownTime)
         {
             Vector3 initPosition = transform.position;
             initPosition.y = initialHeight;
             Vector3 finalPosition = transform.position;
             finalPosition.y = targetHeight;
 
-            transform.position = Vector3.Lerp(initPosition, finalPosition, elapsedTime / UpDownTime);
+            transform.position = Vector3.Lerp(initPosition, finalPosition, elapsedTime / Constants.UpDownTime);
 
             elapsedTime += Time.deltaTime;
             yield return null;
