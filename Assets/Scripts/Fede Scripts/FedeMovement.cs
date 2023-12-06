@@ -98,7 +98,7 @@ public class FedeMovement : MonoBehaviour
         if (!isJumping && actualHeight != transform.position.y) { ChangeOfLevel(); }
 
         // Prepare Direction
-        if (rotateSense != 0 && !oneRotation)  
+        if (rotateSense != 0 && !oneRotation && !blockedRotation)  
         {
             ChangeDirection(rotateSense);
         }

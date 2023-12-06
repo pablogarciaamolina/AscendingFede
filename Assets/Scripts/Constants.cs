@@ -42,7 +42,9 @@ public static class Constants
     public const float fireballDamage = 10f;
 
     // Terrain constants
+    ///Ice terrain
     public const float iceSpeed = 10f;
+    ///Fire terrain
     public const float fireDamage = 15f;
     public const float rateFireDamage = 1.5f;
 
