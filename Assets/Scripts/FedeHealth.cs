@@ -7,6 +7,11 @@ public class FedeHealth : MonoBehaviour
 
     public FedeStats stats;
 
+    private void Start()
+    {
+        stats = gameObject.GetComponent<FedeStats>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -15,8 +20,6 @@ public class FedeHealth : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        Debug.Log("Fede has been hit");
-
         ProcessHit(Constants.fireballDamage);
     }
 

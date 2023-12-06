@@ -22,11 +22,11 @@ public class FedeMovement : MonoBehaviour
     public AnimationClip _walk, _jump;
     public Animation _Legs;
     private bool doAnimateJump = false;
-    private int lookingTo = 1; // 1 to look right, -1 to look left
 
     // Moving Direction
     private int directionIndex = 0;
     private Vector3 direction;
+    private int lookingTo = 1; // 1 to look right, -1 to look left
 
     // Moving Input
     private int moveHorizontal = 0; // 1 for right, -1 for left. 0 no movement
@@ -47,6 +47,10 @@ public class FedeMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        // Initialize stats
+        stats = gameObject.GetComponent<FedeStats>();
+
         // Intialize position
         transform.position = Constants.playerInitialPosition;
 
@@ -167,7 +171,7 @@ public class FedeMovement : MonoBehaviour
     {
         if (moveHorizontal == 0 && !isJumping)
         {
-            rb.velocity = direction * stats.speedAfterStop;
+            rb.velocity = direction * lookingTo * stats.speedAfterStop;
         }
     }
 

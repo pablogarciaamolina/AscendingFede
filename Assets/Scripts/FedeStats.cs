@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class FedeStats : MonoBehaviour
 {
-    public float movingForce = 200f;
-    public float maxHorizontalSpeed = 12f;
-    public float jumpForce = 2500f;
-    public float speedAfterStop = 0f;
-    public float health = Constants.maxHealth;
+    // Movement
+    public float movingForce = Constants.initMovingForce;
+    public float maxHorizontalSpeed = Constants.initMaxHorizontalSpeed;
+    public float jumpForce = Constants.initJumpForce;
+    public float speedAfterStop = Constants.initSpeedAfterStop;
+
+    // Health
+    public float health = Constants.initHealth;
 }
