@@ -5,13 +5,7 @@ using UnityEngine;
 public class FedeHealth : MonoBehaviour
 {
 
-    private float health;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        health = Constants.maxHealth;
-    }
+    public FedeStats stats;
 
     // Update is called once per frame
     void Update()
@@ -28,6 +22,6 @@ public class FedeHealth : MonoBehaviour
 
     private void ProcessHit(float damage)
     {
-        health -= damage;
+       stats.health -= damage;
     }
 }

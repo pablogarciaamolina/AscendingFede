@@ -7,12 +7,8 @@ using UnityEngine.UIElements;
 
 public class FedeMovement : MonoBehaviour
 {
-    // Custom Game parameters
-    [Header("Parameters")]
-    [SerializeField] float movingForce = 200f;
-    [SerializeField] float maxHorizontalSpeed = 12f;
-    [SerializeField] float jumpForce = 2500f;
-    [SerializeField] float groundFrictionForce = 300f;
+    // Player stats
+    public FedeStats stats;
 
     // Manager(s)
     private MovementManager mvM;
@@ -157,11 +153,11 @@ public class FedeMovement : MonoBehaviour
 
     private void LimitVelocity()
     {
-        if (Mathf.Abs(rb.velocity.x) >= maxHorizontalSpeed)
+        if (Mathf.Abs(rb.velocity.x) >= stats.maxHorizontalSpeed)
         {
             movingVector.x = 0;
         }
-        else if (Mathf.Abs(rb.velocity.z) >= maxHorizontalSpeed)
+        else if (Mathf.Abs(rb.velocity.z) >= stats.maxHorizontalSpeed)
         {
             movingVector.z = 0;
         }
@@ -171,7 +167,7 @@ public class FedeMovement : MonoBehaviour
     {
         if (moveHorizontal == 0 && !isJumping)
         {
-            rb.velocity = Vector3.zero;
+            rb.velocity = direction * stats.speedAfterStop;
         }
     }
 
@@ -183,7 +179,7 @@ public class FedeMovement : MonoBehaviour
     private Vector3 PrepareStraightMove()
     {
 
-        return direction * moveHorizontal * movingForce;
+        return direction * moveHorizontal * stats.movingForce;
     }
 
     private Vector3 PrepareJump()
@@ -191,7 +187,7 @@ public class FedeMovement : MonoBehaviour
         Vector3 jumpVector = Vector3.zero;
         if (doJump && !isJumping)
         {
-            jumpVector += Vector3.up * jumpForce;
+            jumpVector += Vector3.up * stats.jumpForce;
             isJumping = true;
             doAnimateJump = true;
         }
