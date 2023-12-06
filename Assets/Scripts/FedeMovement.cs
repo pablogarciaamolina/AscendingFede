@@ -12,6 +12,7 @@ public class FedeMovement : MonoBehaviour
     [SerializeField] float movingForce = 200f;
     [SerializeField] float maxHorizontalSpeed = 12f;
     [SerializeField] float jumpForce = 2500f;
+    [SerializeField] float groundFrictionForce = 300f;
 
     // Manager(s)
     private MovementManager mvM;
@@ -40,6 +41,7 @@ public class FedeMovement : MonoBehaviour
     private Vector3 movingVector;
     private bool isJumping;
     private bool blockedRotation = false;
+    private bool oneRotation = false;
     private float actualHeight; // Useful to determine if the level (grounded height) changes
 
     // EVENTS
@@ -67,15 +69,15 @@ public class FedeMovement : MonoBehaviour
         mvM.JumpMovementEvent += SetDoJump;
         /// RotationMovement
         mvM.RotationMovementEvent += SetRotate;
-        mvM.BlockRotation += SetBlockRotation;
-        mvM.UnblockRotation += SetUnblockRotation;
+        mvM.CameraStartRotation += CameraBeginRotation;
+        mvM.CameraEndRotation += CameraEndRotation;
         // player depth movement
-        eM.SendPositionEvent += SendPosition;
-        eM.setPlayertoBlock += SetPlayerDepth;
+        //eM.SendPositionEvent += SendPosition;
+        //eM.setPlayertoBlock += SetPlayerDepth;
 
         // Set suscriptions to events of this class
         LevelChangedEvent += mvM.ManageCharacterLevelChange;
-        SideChangeEvent += eM.ManageSideChange;
+        //SideChangeEvent += eM.ManageSideChange;
 
         // Initialize direction
         direction = Constants.Directions[directionIndex];
@@ -96,7 +98,10 @@ public class FedeMovement : MonoBehaviour
         if (!isJumping && actualHeight != transform.position.y) { ChangeOfLevel(); }
 
         // Prepare Direction
-        if (rotateSense != 0 && !blockedRotation)  { ChangeDirection(rotateSense); }
+        if (rotateSense != 0 && !oneRotation)  
+        {
+            ChangeDirection(rotateSense);
+        }
 
 
         // Prepare movement
@@ -109,6 +114,7 @@ public class FedeMovement : MonoBehaviour
 
         // Limit movement
         LimitVelocity();
+        GroundStop();
 
         // Do movement
         ApplyForce(movingVector);
@@ -138,14 +144,15 @@ public class FedeMovement : MonoBehaviour
         SideChangeEvent.Invoke(this.transform.position);
     }
 
-    private void SetBlockRotation()
+    private void CameraBeginRotation()
     {
         blockedRotation = true;
     }
 
-    private void SetUnblockRotation()
+    private void CameraEndRotation()
     {
         blockedRotation = false;
+        oneRotation = false;
     }
 
     private void LimitVelocity()
@@ -157,6 +164,14 @@ public class FedeMovement : MonoBehaviour
         else if (Mathf.Abs(rb.velocity.z) >= maxHorizontalSpeed)
         {
             movingVector.z = 0;
+        }
+    }
+
+    private void GroundStop()
+    {
+        if (moveHorizontal == 0 && !isJumping)
+        {
+            rb.velocity = Vector3.zero;
         }
     }
 
@@ -221,6 +236,7 @@ public class FedeMovement : MonoBehaviour
         direction = Constants.Directions[directionIndex];
         RotateByAmount(Constants.rotationAmount*way);
         rotateSense = 0;
+        oneRotation = true;
     }
 
     private void RotateByAmount(float amount)
