@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class FireTerrain : BaseTerrain 
 {
-    public override void ModifyStats(ref FedeStats stats)
+    public override void ModifyHealth(FedeHealth fedeHealth)
     {
-        stats.health -= Constants.fireDamage;
+        fedeHealth.StartBurning();
     }
+
 }

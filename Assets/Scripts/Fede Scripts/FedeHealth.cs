@@ -7,6 +7,9 @@ public class FedeHealth : MonoBehaviour
 
     public FedeStats stats;
 
+    // Terrain variables
+    private bool beingBurned = false;
+
     private void Start()
     {
         stats = gameObject.GetComponent<FedeStats>();
@@ -27,4 +30,27 @@ public class FedeHealth : MonoBehaviour
     {
        stats.health -= damage;
     }
+
+    public void StartBurning()
+    {
+        beingBurned = true;
+
+        StartCoroutine(Burning());
+    }
+
+    public void StopBurning()
+    {
+        beingBurned = false;
+    }
+
+    IEnumerator Burning()
+    {
+        while (beingBurned)
+        {
+            stats.health -= Constants.fireDamage;
+
+            yield return new WaitForSeconds(Constants.rateFireDamage);
+        }
+    }
+
 }

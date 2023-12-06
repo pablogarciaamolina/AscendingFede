@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IceTerrain : BaseTerrain
 {
-    public override void ModifyStats(ref FedeStats stats)
+    public override void ModifyMovement(ref FedeStats stats)
     {
         stats.speedAfterStop = Constants.iceSpeed;
     }

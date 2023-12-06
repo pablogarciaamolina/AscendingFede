@@ -5,7 +5,7 @@ using UnityEngine;
 public class BaseTerrain : MonoBehaviour
 {
 
-    public virtual void ModifyStats(ref FedeStats stats)
+    public virtual void ModifyMovement(ref FedeStats stats)
     {
         // Reset Movement
         stats.speedAfterStop = Constants.initSpeedAfterStop;
@@ -14,15 +14,15 @@ public class BaseTerrain : MonoBehaviour
         stats.jumpForce = Constants.initJumpForce;
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    public virtual void ModifyHealth(FedeHealth fedeHealth) 
     {
-        ModifyStats(ref other.GetComponent<FedeMovement>().stats);
+        fedeHealth.StopBurning();
     }
 
-    /*
-    protected virtual void OnTrigerEnter(Collision collision)
+    protected virtual void OnTriggerEnter(Collider other)
     {
-        ModifyStats(ref collision.gameObject.GetComponent<FedeMovement>().stats);
+        ModifyMovement(ref other.GetComponent<FedeMovement>().stats);
+        ModifyHealth(other.GetComponent<FedeHealth>());
     }
-    */
+
 }
