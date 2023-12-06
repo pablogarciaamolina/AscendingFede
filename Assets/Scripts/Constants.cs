@@ -43,5 +43,6 @@ public static class Constants
 
     // Terrain constants
     public const float iceSpeed = 10f;
+    public const float fireDamage = 15f;
 
 }
