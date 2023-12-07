@@ -13,7 +13,7 @@ public static class Constants
 
     // Physics constants
     public const int rotationAmount = -90;
-    public const float groundDetectionDistance = 0.01f;
+    public const float groundDetectionDistance = 0.2f;
     public static Vector3 Center = new Vector3(0f, 0f, 0f);
 
     // Player contants

@@ -32,12 +32,17 @@ public class PlayableEnvironment : MonoBehaviour
     }
     private void setIsBlocking(Vector3 playerpos)
     {
+        // quitar break una vez rehecho !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         isBlocking = false;
         foreach (Transform t in this.gameObject.transform)
         {
+            Vector3 size = t.GetComponent<Collider>().bounds.size;
+            Vector3 max_pos = t.position + size / 2;
+            Vector3 min_pos = t.position - size / 2;
+
             if ( sideIndex == 0 || sideIndex == 2)
             {
-                if (Mathf.Abs(t.position.x - playerpos.x) <= 1 && Mathf.Abs(t.position.y - playerpos.y )<= 1)
+                if (min_pos.x <= playerpos.x && min_pos.y <= playerpos.y && max_pos.x >= playerpos.x && max_pos.y >= playerpos.y)
                 {
                     isBlocking = true;
                     break;
@@ -45,7 +50,7 @@ public class PlayableEnvironment : MonoBehaviour
             }
             else if (sideIndex == 1|| sideIndex == 3) 
             {
-                if (Mathf.Abs(t.position.y - playerpos.y) <= 1 && Mathf.Abs(t.position.z - playerpos.z)<= 1)
+                if (min_pos.z <= playerpos.z && min_pos.y <= playerpos.y && max_pos.z >= playerpos.z && max_pos.y >= playerpos.y)
                 {
                     isBlocking = true;
                     break;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEditor.PlayerSettings;
@@ -18,7 +19,7 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
     private List<Vector3> Directions = new List<Vector3>() { new Vector3(1f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(-1f, 0f, 0f), new Vector3(0f, 0f, -1f) };
   
     private List<List<GameObject>> visibleEnvSidesParents = new List<List<GameObject>>() { new List<GameObject>(), new List<GameObject>(), new List<GameObject>(), new List<GameObject>()};
-    private List<List<GameObject>> visibleEnvSides = new List<List<GameObject>>() { new List<GameObject>(), new List<GameObject>(), new List<GameObject>(), new List<GameObject>() };
+    private List<List<Vector3>> visibleEnvSides = new List<List<Vector3>>() { new List<Vector3>(), new List<Vector3>(), new List<Vector3>(), new List<Vector3>() };
 
     private int max_height = 110;
     private int max_width = 40;
@@ -118,21 +119,21 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
 
             if (sideIndex == 0 || sideIndex == 2)
             {
-                foreach (GameObject go in visibleEnvSides[sideIndex])
+                foreach (Vector3 pos in visibleEnvSides[sideIndex])
                 {
-                    if (go.transform.position.x - playerposition.x <= 0.9f && go.transform.position.y - playerposition.y <= 1)
+                    if (pos.x - playerposition.x <= 0.9f && pos.y - playerposition.y <= 1)
                     {
-                        playerposition.z = go.transform.position.z;
+                        playerposition.z = pos.z;
                     }
                 }
             }
             else if (sideIndex == 1 || sideIndex == 3)
             {
-                foreach (GameObject go in visibleEnvSides[sideIndex])
+                foreach (Vector3 pos in visibleEnvSides[sideIndex])
                 {
-                    if (go.transform.position.z - playerposition.z <= 0.9f && go.transform.position.y - playerposition.y <= 1)
+                    if (pos.z - playerposition.z <= 0.9f && pos.y - playerposition.y <= 1)
                     {
-                        playerposition.x = go.transform.position.x;
+                        playerposition.x = pos.x;
                     }
                 }
             }
@@ -147,41 +148,41 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
 
         if (sideIndex == 0)
         {
-            foreach (GameObject go in visibleEnvSides[sideIndex])
+            foreach (Vector3 pos in visibleEnvSides[sideIndex])
             {
-                if (playerposition.z - go.transform.position.z >= 0.9f)
+                if (playerposition.z - pos.z >= 0.9f)
                 {
-                    playerposition.z = go.transform.position.z;
+                    playerposition.z = pos.z;
                 }
             }
         }
         else if (sideIndex == 1)
         {
-            foreach (GameObject go in visibleEnvSides[sideIndex])
+            foreach (Vector3 pos in visibleEnvSides[sideIndex])
             {
-                if (go.transform.position.x - playerposition.x >= 0.9f)
+                if (pos.x - playerposition.x >= 0.9f)
                 {
-                    playerposition.x = go.transform.position.x;
+                    playerposition.x = pos.x;
                 }
             }
         }
         else if (sideIndex == 2)
         {
-            foreach (GameObject go in visibleEnvSides[sideIndex])
+            foreach (Vector3 pos in visibleEnvSides[sideIndex])
             {
-                if (go.transform.position.z - playerposition.z >= 0.9f)
+                if (pos.z - playerposition.z >= 0.9f)
                 {
-                    playerposition.z = go.transform.position.z;
+                    playerposition.z = pos.z;
                 }
             }
         }
         else if (sideIndex == 3)
         {
-            foreach (GameObject go in visibleEnvSides[sideIndex])
+            foreach (Vector3 pos in visibleEnvSides[sideIndex])
             {
-                if (playerposition.x - go.transform.position.x >= 0.9f)
+                if (playerposition.x - pos.x >= 0.9f)
                 {
-                    playerposition.x = go.transform.position.x;
+                    playerposition.x = pos.x;
                 }
             }
         }
@@ -194,92 +195,79 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
     }
     private bool checkforblock(Vector3 pos)
     {
-        foreach (Transform tp in playableEnvironment)
+        foreach (Vector3 posible_pos in visibleEnvSides[sideIndex])
         {
-            foreach ( Transform t in tp)
+            if (Mathf.Abs(posible_pos.x - pos.x) <= 0.75 && Mathf.Abs(posible_pos.y - pos.y) <= 0.75 && Mathf.Abs(posible_pos.z - pos.z) <= 0.75)
             {
-                if (Mathf.Abs(t.position.x - pos.x) <= 0.75 && Mathf.Abs(t.position.y - pos.y) <= 0.75 && Mathf.Abs(t.position.z - pos.z) <= 0.75)
-                {
-                    return true;
-                }
+                return true;
             }
-            
         }
         return false;
     }
     private void createRayGrid()
-    { 
+    {
         for (int i = -max_width; i < max_width; i += 1)
         {
             for (int j = -10; j < max_height; j += 1)
             {
                 Vector3 coord = new Vector3(i, j, -2*max_width);
                 Ray ray = new Ray(coord, new Vector3(0f, 0f, 1f));
-                setVisibleEnvironment(ray,0);
+                setVisibleEnvironment(ray, 0);
 
                 coord = new Vector3(-2*max_width, j, i);
                 ray = new Ray(coord, new Vector3(1f, 0f, 0f));
-                setVisibleEnvironment(ray,3);
+                setVisibleEnvironment(ray, 3);
 
                 coord = new Vector3(i, j, 2*max_width);
                 ray = new Ray(coord, new Vector3(0f, 0f, -1f));
-                setVisibleEnvironment(ray,2);
+                setVisibleEnvironment(ray, 2);
 
                 coord = new Vector3(2*max_width, j, i);
                 ray = new Ray(coord, new Vector3(-1f, 0f, 0f));
-                setVisibleEnvironment(ray,1);
+                setVisibleEnvironment(ray, 1);
             }
         }
     }
     private void setVisibleEnvironment(Ray ray,int index)
     {
+        // añadir la posicion en vez del hijo
         RaycastHit hit;
-        GameObject obj;
+        Vector3 pos;
         if (Physics.Raycast(ray, out hit))
         {
             if (hit.collider != null)
             {
-                obj = hit.transform.gameObject;
-                if (!visibleEnvSides[index].Contains(obj))
+                pos = hit.point;
+                // revisar que funcione bien 
+                if (!visibleEnvSides[index].Contains(pos))
                 {
-                    checkplayable(obj,index);
+                    checkplayable(pos, index, hit.transform.gameObject);
                 }
             }
         }
     }
-    private void checkplayable(GameObject obj,int index)
+    private void checkplayable(Vector3 pos,int index, GameObject go)
     {
         bool inlist = false;
-        GameObject parentobj = new GameObject();
 
         foreach (Transform tp in playableEnvironment)
         {
-            foreach (Transform t in tp)
+            if (tp.gameObject == go)
             {
-                if (t.gameObject == obj)
+                inlist = true;
+                if (!visibleEnvSides[index].Contains(pos))
                 {
-                    inlist = true;
-                    Destroy(parentobj);
-                    parentobj = tp.gameObject;
-                    if (!visibleEnvSides[index].Contains(obj))
-                    {
-                        visibleEnvSides[index].Add(obj);
-                    }
+                    visibleEnvSides[index].Add(pos);
                 }
             }
         }
         if (inlist)
         {
-            if (!visibleEnvSidesParents[index].Contains(parentobj))
+            if (!visibleEnvSidesParents[index].Contains(go))
             {
-                visibleEnvSidesParents[index].Add(parentobj);
+                visibleEnvSidesParents[index].Add(go);
             }
         }
-        else
-        {
-            Destroy(parentobj);
-        }
-        
     }
     private void BuildInvisibleCubes(PlayableEnvironment pe)
     {
@@ -295,32 +283,37 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
             depth = actual_pos.x;
         }
 
-        foreach (Transform t in obj.transform)
+        Vector3 size = pe.GetComponent<Collider>().bounds.size;
+        Vector3 max_pos = pe.transform.position + size / 2;
+        Vector3 min_pos = pe.transform.position - size / 2;
+
+        foreach (Vector3 p in visibleEnvSides[sideIndex])
         {
-            if (visibleEnvSides[sideIndex].Contains(t.gameObject))
+            Vector3 pos = new Vector3(0, 0, 0);
+
+            if (sideIndex == 0 || sideIndex == 2)
             {
-                GameObject block = t.gameObject;
-                Vector3 pos = new Vector3(0, 0, 0);
+                if (min_pos.x <= p.x && min_pos.y <= p.y && max_pos.x >= p.x && max_pos.y >= p.y)
+                {
+                    pos = new Vector3(p.x, p.y, depth);
+                }
+            }
+            else if (sideIndex == 1 || sideIndex == 3)
+            {
+                if (min_pos.z <= p.z && min_pos.y <= p.y && max_pos.z >= p.z && max_pos.y >= p.y)
+                {
+                    pos = new Vector3(depth, p.y, p.z);
+                }
+            }
 
-                if (sideIndex == 0 || sideIndex == 2)
-                {
-                    pos = new Vector3(block.transform.position.x, block.transform.position.y, depth);
-                }
-                else if (sideIndex == 1 || sideIndex == 3)
-                {
-                    pos = new Vector3(depth, block.transform.position.y, block.transform.position.z);
-                }
-
-                if (!checkforblock(pos))
-                {
-                    CreateInvisibleCube(pos);
-                }
+            if (!checkforblock(pos) && pos != Vector3.zero)
+            {
+                CreateInvisibleCube(pos);
             }
         }
     }
     public void CreateInvisibleCube(Vector3 pos)
     {
-
         GameObject inv = Instantiate(InvisibleCube);
         inv.transform.position = pos;
         InvisibleList.Add(inv.transform);
