@@ -12,4 +12,5 @@ public class FedeStats : MonoBehaviour
 
     // Health
     public float health = Constants.initHealth;
+    public bool isBurning = false;
 }

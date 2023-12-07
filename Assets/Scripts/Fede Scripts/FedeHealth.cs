@@ -35,12 +35,17 @@ public class FedeHealth : MonoBehaviour
     {
         beingBurned = true;
 
-        StartCoroutine(Burning());
+        if (!stats.isBurning)
+        {
+            stats.isBurning = true;
+            StartCoroutine(Burning());
+        }
     }
 
     public void StopBurning()
     {
         beingBurned = false;
+        stats.isBurning = false;
     }
 
     IEnumerator Burning()
