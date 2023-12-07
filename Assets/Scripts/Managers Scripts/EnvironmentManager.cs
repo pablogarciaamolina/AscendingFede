@@ -51,7 +51,7 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
         Camera = GameObject.Find("Camera");
         cameraSwitcher = Camera.GetComponent<CameraSwitcher>();
 
-        ipM.ToRotate += sideRotation;
+        //ipM.ToRotate += sideRotation;
         cameraSwitcher.EndRotation += CameraDoneRotating;
 
         foreach (Transform t in playableEnvironment.transform)

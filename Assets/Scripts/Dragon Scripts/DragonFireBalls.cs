@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class DragonFireBalls : MonoBehaviour
 {
+    // Animation elements
+    private Animator _animator;
+
+
     private ParticleSystem systemOfParticles;
     private GameObject fede;
 
     // Start is called before the first frame update
     void Awake()
     {
+        _animator = GetComponent<Animator>();
         systemOfParticles = GetComponent<ParticleSystem>();
         fede = GameObject.FindGameObjectWithTag("Player");
     }
@@ -33,7 +38,13 @@ public class DragonFireBalls : MonoBehaviour
         // Orient particle system
         systemOfParticles.transform.LookAt(position);
 
-        // Emit fireball
+        // Emit fireball and animate
+        _animator.SetTrigger("Shoot");
         systemOfParticles.Emit(1);
+    }
+
+    IEnumerator WaitSecondBeforeShooting()
+    {
+        yield return null;
     }
 }

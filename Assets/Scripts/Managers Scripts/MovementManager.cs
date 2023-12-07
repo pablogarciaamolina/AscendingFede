@@ -17,8 +17,8 @@ public class MovementManager : GenericSingleton<MovementManager>
     public event Action<int> HorizontalMovementEvent;
     public event Action JumpMovementEvent;
     public event Action<int> RotationMovementEvent;
-    public event Action BlockRotation;
-    public event Action UnblockRotation;
+    public event Action CameraStartRotation;
+    public event Action CameraEndRotation;
     public event Action<float> CharacterChangeOfLevel;
 
 
@@ -70,12 +70,12 @@ public class MovementManager : GenericSingleton<MovementManager>
 
     public void CameraStartRotating()
     {
-        BlockRotation.Invoke();
+        CameraStartRotation.Invoke();
     }
 
     public void CameraDoneRotating()
     {
-        UnblockRotation.Invoke();
+        CameraEndRotation.Invoke();
     }
 
     public void ManageCharacterLevelChange(float newLevel)

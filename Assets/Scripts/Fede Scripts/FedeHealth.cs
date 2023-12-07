@@ -10,14 +10,14 @@ public class FedeHealth : MonoBehaviour
     private float health;
 
     public Action<float> healthUpdate;
+    public FedeStats stats;
 
-    private void Awake()
-    {
-    }
+    private bool beingBurned = false;
 
-    // Start is called before the first frame update
-    void Start()
+    
+    private void Start()
     {
+        stats = gameObject.GetComponent<FedeStats>();
         health = Constants.maxHealth;
     }
 
@@ -29,12 +29,39 @@ public class FedeHealth : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-
         ProcessHit(Constants.fireballDamage);
     }
 
     private void ProcessHit(float damage)
     {
-        health -= damage;
+       stats.health -= damage;
     }
+
+    public void StartBurning()
+    {
+        beingBurned = true;
+
+        if (!stats.isBurning)
+        {
+            stats.isBurning = true;
+            StartCoroutine(Burning());
+        }
+    }
+
+    public void StopBurning()
+    {
+        beingBurned = false;
+        stats.isBurning = false;
+    }
+
+    IEnumerator Burning()
+    {
+        while (beingBurned)
+        {
+            stats.health -= Constants.fireDamage;
+
+            yield return new WaitForSeconds(Constants.rateFireDamage);
+        }
+    }
+
 }

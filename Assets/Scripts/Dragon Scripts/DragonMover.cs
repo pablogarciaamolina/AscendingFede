@@ -3,20 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DragonMover : MonoBehaviour
-{
-    // Animation elements
-    private Animator _animator;
-    
-    
-
-
+{  
+   
     private int way = 1; // 1 Up, -1 Down
     private bool moving = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        _animator = GetComponent<Animator>();
+
     }
 
     // Update is called once per frame
@@ -24,7 +19,6 @@ public class DragonMover : MonoBehaviour
     {
         if (!moving)
         {
-            // _animator.Play("Vox_Dragon_Fly"); CHECK
             StartCoroutine(UpDownMovement(way));
             way *= -1;
         }
