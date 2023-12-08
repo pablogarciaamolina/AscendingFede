@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class FedeHealth : MonoBehaviour
 {
     [SerializeField] private HealthBar Bar;
-    private float health;
 
     public Action<float> healthUpdate;
     public FedeStats stats;
@@ -15,7 +14,7 @@ public class FedeHealth : MonoBehaviour
     private bool beingBurned = false;
 
     
-    private void Start()
+    private void Awake()
     {
         stats = gameObject.GetComponent<FedeStats>();
     }
@@ -23,7 +22,7 @@ public class FedeHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        healthUpdate.Invoke(health);
+        //healthUpdate.Invoke(stats.health);
     }
 
     private void OnParticleCollision(GameObject other)

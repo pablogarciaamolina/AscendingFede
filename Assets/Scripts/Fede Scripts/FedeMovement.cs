@@ -68,7 +68,7 @@ public class FedeMovement : MonoBehaviour
         /// Jump movement
         mvM.JumpMovementEvent += SetDoJump;
         /// RotationMovement
-        mvM.RotationMovementEvent += SetRotate;
+        mvM.RotationMovementEvent += Rotate;
         mvM.CameraStartRotation += CameraBeginRotation;
         mvM.CameraEndRotation += CameraEndRotation;
         // player depth movement
@@ -98,10 +98,7 @@ public class FedeMovement : MonoBehaviour
         if (!isJumping && actualHeight != transform.position.y) { ChangeOfLevel(); }
 
         // Prepare Direction
-        if (rotateSense != 0 && !oneRotation && !blockedRotation)  
-        {
-            ChangeDirection(rotateSense);
-        }
+        /* Deprecated, changed the direction directly with the input form the MovementManager*/
 
 
         // Prepare movement
@@ -134,11 +131,6 @@ public class FedeMovement : MonoBehaviour
         doJump = true;
     }
 
-    private void SetRotate(int way) 
-    {
-        rotateSense = way;
-    }
-
     private void SendPosition()
     {
         SideChangeEvent.Invoke(this.transform.position);
@@ -153,6 +145,11 @@ public class FedeMovement : MonoBehaviour
     {
         blockedRotation = false;
         oneRotation = false;
+    }
+
+    private void StopVelocity()
+    {
+        rb.velocity = Vector3.zero;
     }
 
     private void LimitVelocity()
@@ -230,8 +227,18 @@ public class FedeMovement : MonoBehaviour
         }
     }
 
+    private void Rotate(int way)
+    {
+        if (!oneRotation)
+        {
+            ChangeDirection(way);
+        }
+    }
+
     private void ChangeDirection(int way)
     {
+        //StopVelocity();
+
         directionIndex = Mod(directionIndex + way, Constants.Directions.Count);
         direction = Constants.Directions[directionIndex];
         RotateByAmount(Constants.rotationAmount*way);

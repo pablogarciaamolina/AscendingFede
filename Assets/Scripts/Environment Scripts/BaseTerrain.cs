@@ -10,8 +10,8 @@ public class BaseTerrain : MonoBehaviour
         // Reset Movement
         stats.speedAfterStop = Constants.initSpeedAfterStop;
         stats.movingForce = Constants.initMovingForce;
-        stats.speedAfterStop = Constants.initSpeedAfterStop;
         stats.jumpForce = Constants.initJumpForce;
+        stats.maxHorizontalSpeed = Constants.initMaxHorizontalSpeed;
     }
 
     public virtual void ModifyHealth(FedeHealth fedeHealth) 

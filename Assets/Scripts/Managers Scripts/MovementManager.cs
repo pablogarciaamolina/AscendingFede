@@ -47,11 +47,6 @@ public class MovementManager : GenericSingleton<MovementManager>
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void HorizontalInputEvent(int way)
     {
