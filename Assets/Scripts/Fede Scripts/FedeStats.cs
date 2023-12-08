@@ -6,6 +6,7 @@ public class FedeStats : MonoBehaviour
 {
     // Movement
     public float movingForce = Constants.initMovingForce;
+    public float midAirMovingForce = Constants.initMidAirMovingForce;
     public float maxHorizontalSpeed = Constants.initMaxHorizontalSpeed;
     public float jumpForce = Constants.initJumpForce;
     public float speedAfterStop = Constants.initSpeedAfterStop;

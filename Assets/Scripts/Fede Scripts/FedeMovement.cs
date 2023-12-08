@@ -179,8 +179,17 @@ public class FedeMovement : MonoBehaviour
 
     private Vector3 PrepareStraightMove()
     {
+        float force;
+        if (isJumping)
+        {
+            force = stats.midAirMovingForce;
+        }
+        else
+        {
+            force = stats.movingForce;
+        }
 
-        return direction * moveHorizontal * stats.movingForce;
+        return direction * moveHorizontal * force;
     }
 
     private Vector3 PrepareJump()
