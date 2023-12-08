@@ -18,7 +18,6 @@ public class FedeHealth : MonoBehaviour
     private void Start()
     {
         stats = gameObject.GetComponent<FedeStats>();
-        health = Constants.maxHealth;
     }
 
     // Update is called once per frame

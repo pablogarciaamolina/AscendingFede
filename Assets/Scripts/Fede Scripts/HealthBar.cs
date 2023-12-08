@@ -18,8 +18,8 @@ public class HealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        healthBar.maxValue = Constants.maxHealth;
-        healthBar.value = Constants.maxHealth;
+        healthBar.maxValue = Constants.initHealth;
+        healthBar.value = Constants.initHealth;
     }
 
     // Update is called once per frame
