@@ -102,6 +102,15 @@ It must be noted that, in order to affect the player, the terrains (by means of 
 
 As mentioned previously, there are special *platforms:* InvisibleCube objects. Through the development, a problem arose: ANDREW DESCRIBEMELO. That's why the creation of invisible cubes was decided. Using them, we could ...
 
+## Project's ReWind
+In order for this to be a really good project for our clipboard, it must carry along some of the greatest moments we 3 had along its development. In this section, we'll do a brief review of those instants
+
+1. Pablo trying to decipher Andrew's code and commit's structure
+
+![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/GIFS%20-%20Javi/Andrew%20whAT.gif)
+
+2. 
+
 ## Contribute!
 
 ## Credits
