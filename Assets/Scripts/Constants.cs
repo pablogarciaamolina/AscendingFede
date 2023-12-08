@@ -38,8 +38,17 @@ public static class Constants
     public const float distanceUpDownFromCenter = 5f;
     public const float rotationSpeed = 5f;
     public const float multiplierTimeRotatingInOneSense = 1;
-    public const float fireballRate = 3f;
     public const float fireballDamage = 10f;
+    public const float dragonShootingAnimationDelay = .5f;
+    /// Stages: Define the changes in dificulty for the Dragon
+    public const int NumStages = 3;
+    public static List<float> Stages = new List<float> { 23f, 25f, 27f };
+    public const float rateOfFireballsChange = 2f;
+    public const int numberOfFireballsChange = 2;
+    /// Stats
+    public const float initFireballRate = 3f;
+    public const int initNumFireballs = 1;
+
 
     // Terrain constants
     ///Ice terrain
