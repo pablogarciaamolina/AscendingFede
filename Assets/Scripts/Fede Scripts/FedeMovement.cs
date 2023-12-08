@@ -77,7 +77,7 @@ public class FedeMovement : MonoBehaviour
 
         // Set suscriptions to events of this class
         LevelChangedEvent += mvM.ManageCharacterLevelChange;
-        //SideChangeEvent += eM.ManageSideChange;
+        SideChangeEvent += eM.ManageSideChange;
 
         // Initialize direction
         direction = Constants.Directions[directionIndex];

@@ -11,6 +11,7 @@ public class PlayableEnvironment : MonoBehaviour
     private int sideIndex = 0;
 
     public Action<PlayableEnvironment> scanBlocking;
+    public string quality;
 
     private void Awake()
     {

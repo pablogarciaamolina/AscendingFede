@@ -54,5 +54,5 @@ public class InputManager : GenericSingleton<InputManager>
             ToRotate.Invoke(-1);
         }
     }
-    
+
 }

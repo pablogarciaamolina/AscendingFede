@@ -22,7 +22,7 @@ public class FedeHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //healthUpdate.Invoke(stats.health);
+        healthUpdate.Invoke(stats.health);
     }
 
     private void OnParticleCollision(GameObject other)

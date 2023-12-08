@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -51,7 +52,7 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
         Camera = GameObject.Find("Camera");
         cameraSwitcher = Camera.GetComponent<CameraSwitcher>();
 
-        //ipM.ToRotate += sideRotation;
+        ipM.ToRotate += sideRotation;
         cameraSwitcher.EndRotation += CameraDoneRotating;
 
         foreach (Transform t in playableEnvironment.transform)
@@ -287,34 +288,68 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
         Vector3 max_pos = pe.transform.position + size / 2;
         Vector3 min_pos = pe.transform.position - size / 2;
 
-        foreach (Vector3 p in visibleEnvSides[sideIndex])
+        if (visibleEnvSidesParents[sideIndex].Contains(obj))
         {
-            Vector3 pos = new Vector3(0, 0, 0);
+
+            Vector3 invSize = Vector3.zero;
+            Vector3 pos = Vector3.zero;
 
             if (sideIndex == 0 || sideIndex == 2)
             {
-                if (min_pos.x <= p.x && min_pos.y <= p.y && max_pos.x >= p.x && max_pos.y >= p.y)
-                {
-                    pos = new Vector3(p.x, p.y, depth);
-                }
+                invSize = new Vector3(size.x, size.y, 2);
+                pos = new Vector3(pe.transform.position.x, pe.transform.position.y, depth);
             }
             else if (sideIndex == 1 || sideIndex == 3)
             {
-                if (min_pos.z <= p.z && min_pos.y <= p.y && max_pos.z >= p.z && max_pos.y >= p.y)
-                {
-                    pos = new Vector3(depth, p.y, p.z);
-                }
+                invSize = new Vector3(2, size.y, size.z);
+                pos = new Vector3(depth, pe.transform.position.y, pe.transform.position.z);
             }
 
-            if (!checkforblock(pos) && pos != Vector3.zero)
+            GameObject inv = Instantiate(InvisibleCube);
+            if (pe.quality == "ice")
             {
-                CreateInvisibleCube(pos);
+                inv.AddComponent<IceTerrain>();
             }
+            else if (pe.quality == "fire")
+            {
+                inv.AddComponent<FireTerrain>();
+            }
+            else if (pe.quality == "heal")
+            {
+                //
+            }
+            else
+            {
+                inv.AddComponent<BaseTerrain>();
+            }
+            inv.transform.localScale = invSize;
+            inv.transform.position = pos;
+            InvisibleList.Add(inv.transform);
+            InvisibleCube sc = inv.GetComponent<InvisibleCube>();
+            sc.CollidedWithPlayer += OnInvisibleCube;
+            sc.ColisionExit += NotOnInvisibleCube;
         }
     }
-    public void CreateInvisibleCube(Vector3 pos)
+    
+    public void CreateInvisibleCube(Vector3 pos, string quality)
     {
         GameObject inv = Instantiate(InvisibleCube);
+        if (quality == "ice")
+        {
+            inv.AddComponent<IceTerrain>();
+        }
+        else if (quality == "fire")
+        {
+            inv.AddComponent<FireTerrain>();
+        }
+        else if (quality == "heal")
+        {
+            //
+        }
+        else
+        {
+            inv.AddComponent<BaseTerrain>();
+        }
         inv.transform.position = pos;
         InvisibleList.Add(inv.transform);
         InvisibleCube sc = inv.GetComponent<InvisibleCube>();
