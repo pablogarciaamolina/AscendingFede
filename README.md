@@ -30,9 +30,7 @@ The last thing we have to mention is that the dragon, in order to make it even h
 
 ## Installing and Running the Game
 
-
 ## How to use the Game
-
 
 ## Project Report
 
@@ -62,11 +60,7 @@ Using a LevelChanged Event, we were able to keep the camera and player's vertica
 
 ###### SI: Inputs System
 
-As learned throughout the last weeks of the course, we are using an Event-Driven Architecture in our game. This comes in hand when managing the inputs. Given that our movements don't need to know what's happening to the inputs (they only need a command of what to do), we created three different events in the InputManager script (for moving, jumping and rotating). Employing the Input's GetAxis (for horizontal movement, which may be left-right) and GetKeyDown methods (for unique effects, such as jumping), we invoke the different subscribed objects. All the possible inputs are centralised in a Input Manager,
-
-###### SP: Player's System
-
-In order to manage the different stats our player has, as well as its interactions with other objects (terrains, fireballs, etc.), we had to add pieces of code to our scripts
+As learned throughout the last weeks of the course, we are using an Event-Driven Architecture in our game. This comes in hand when managing the inputs. Given that our movements don't need to know what's happening to the inputs (they only need a command of what to do), we created three different events in the InputManager script (for moving, jumping and rotating). Employing the Input's GetAxis (for horizontal movement, which may be left-right) and GetKeyDown methods (for unique effects, such as jumping), we invoke the different subscribed objects. All the possible inputs are centralised in a Input Manager.
 
 ###### SIEO: Interaction between Objects System
 
@@ -74,24 +68,21 @@ In this partition, we must take into account the different managers that make up
 
 We'll start with the Input: Following the lines of correct design patterns, the inputs and its effects are connected using event-driven architecture, aiming at maximum independence between objects.
 
-EnvironmentManager, on the other hand, is a bit more complex. First of all, using the event-action pairs of the InputManager, it handles the correct movement of the player. At first glance, this might not make sense, but it should be noted that the player may not move into a platform whose level is not identical, for example. The different conditions in which the player moves around the world constrain its freedom, reason why this function exists
+EnvironmentManager, on the other hand, is a bit more complex. First of all, using the event-action pairs of the InputManager, it handles the correct movement of the player. At first glance, this might not make sense, but it should be noted that the player may not move into a platform whose level is not identical, for example. The different conditions in which the player moves around the world constrain its freedom, reason why this function exists. Additionally, there exists an special platform, InvisibleCube, which will be described in the SPE section. Apart from handling Fede's movement around its surroundings, this manager also tells the CameraSwapper what to do (based on the inputs).
+
+To end with this system, we needed one more Manager: one concerning the movements: both of the Camera and Fede's. In it, the different events related with each input are invoked (Jumps and movements for Fede and Rotations for the camera)
 
 ###### SMCD: Dragon's Control and Movement System
 
-Up to this point, the player felt safe while climbing, only having to care not to trip on its foot. Or so he thought! We, developers, aren't so pious about our games, so a dragon is introduced to the game. Now, the knight must dodge its magic fireballs, otherwise it'll suffer a gory death. This constant chase-like mechanic is contained in the (??? Qué Script hace eso). In addition to this, to make its movement as realistic as possible, we had it keep its vertical position in a sway-like manner (), going up and down. This, together with the movement in the horizontal axis, made it much more realistic. Both these actions are encapsulated in the DragonMover Script
+Up to this point, the player felt safe while climbing, only having to care not to trip on its foot. Or so he thought! We, developers, aren't so pious about our games, so a dragon is introduced to the game. Now, the knight must dodge its magic fireballs, otherwise it'll suffer a gory death. This constant chase-like mechanic is contained in the DragonHolder Script. In addition to this, to make its movement as realistic as possible, we had it keep its vertical position in a sway-like manner (), going up and down. This, together with the movement in the horizontal axis, made it much more realistic. Both these actions are encapsulated in the DragonMover Script
 
 ###### SPE: Environment Properties System
 
 To make the game more challenging and entertaining, different kinds of platforms have been designed by our most creative members. Three different kinds will interact with the player: Ice, Fire and a Healing one. Each one will have different effects on the player (either changing its movement stats by communicating to the MovementManager or affecting the player's health via the HealthManager). They all inherit their functionalities from the BaseTerrain object, expanding its functionalities
 
-One thing not mentioned yet but vital to the correct functioning of our game are the InvisibleCube objects. Through the development, a problem arose: ANDREW DESCRIBEMELO. That's why the creation of invisible cubes was decided. Using them, we could ...
-
-###### SBE:
-
-ewfewofi
+As mentioned previously, there are special *platforms:* InvisibleCube objects. Through the development, a problem arose: ANDREW DESCRIBEMELO. That's why the creation of invisible cubes was decided. Using them, we could ...
 
 ## Contribute!
-
 
 ## Credits
 
