@@ -48,9 +48,15 @@ This system, designated SMC, Camera Movement System, for its initials in Spanish
 
 ###### SMP: Player's Movement System
 
-After making our camera mechanic, we took on the task of creating our character, one necessary feature in order to design other parts of the program (such as the functionalities of our platforms). In the FedeMovement script, we can find the physics that arise our knight's movement. Using RigidBody and BoxCollider, we enable its interaction with other objects. By means of subscriptions to events, we make it so that the knight can move when directed to do so by inputs (which will be centralised by the MovementManager script).
+After making our camera mechanic, we took on the task of creating our character, one necessary feature in order to design other parts of the program (such as the functionalities of our platforms). In the FedeMovement script, we can find the physics that arise our knight's movement. Using RigidBody and BoxCollider, we enable its interaction with other objects. By means of subscriptions to events, we make it so that the knight can move when directed to do so by inputs (which will be centralised by the MovementManager script). We'd like to highlight that both Fede and its sword have a collider, enabling a much more lifelike collision with the environment.
 
 Each frame, our player checks its vertical position, updating it, as well as checking the point at which it's looking (in order to make the movement afterwards reasonable). Finally, basing its movement on the inputs (the events it's subscribed to), it executes the necessary animations as well as the position-variables (applying a force).
+
+Eventos de cambio de nivel: grounded -> Nivel -> Input -> Movimiento 
+
+Grounding with RayCasting, so that if the distance is low,
+
+Health:
 
 ###### SIPCP: Camera-player perspective integration system
 
@@ -58,13 +64,21 @@ While updating both the player's and camera's transforms, we ran into a problem 
 
 Using a LevelChanged Event, we were able to keep the camera and player's vertical position in lockstep. This functionality, scripted as a Coroutine checks the character's y position and executes an slerp in the TransitionToLevel interface
 
+Hablar de la rotación y cómo son independientes pero se entienden entre sí
+
 ###### SI: Inputs System
 
 As learned throughout the last weeks of the course, we are using an Event-Driven Architecture in our game. This comes in hand when managing the inputs. Given that our movements don't need to know what's happening to the inputs (they only need a command of what to do), we created three different events in the InputManager script (for moving, jumping and rotating). Employing the Input's GetAxis (for horizontal movement, which may be left-right) and GetKeyDown methods (for unique effects, such as jumping), we invoke the different subscribed objects. All the possible inputs are centralised in a Input Manager.
 
+Said this, some coding-connoiseurs (specially, our valued teachers, Arturo and Daniel) might question the management of inputs, in particular the ones concerning the player's movement and its relation with the camera's perspectives. In such case, we'd like to emphasize a nice feature of our program, that makes it much more intuitive to understand its structure. Given that we have 4 different perspectives for the camera, each perspective has a different direction for the *horizontal* movement (as can be checked in the Directions variable in the Constants script)
+
+Animaciones: Triggers
+
 ###### SIEO: Interaction between Objects System
 
-In this partition, we must take into account the different managers that make up the structure of the interactions between each object: InputManager, EnvironmentManager and MovementManager. All three of them, in order to keep on respecting the good practices when expanding a software project, inherit their main frame from the Generic Singleton object. In this section, we'll explain on detail what objects each of them supervises
+Over the report, a term has and will be repeated that has been central around our game's development: Event-driven Architecture. Considering that our project is, though not unbearable size-wise, quite large, with loads of scripts and a good number of different classes interacting, independence between them when possible was a maxim. For that reason, most of the interactions between classes were built using this architecture.
+
+Returning to the matter in concern, this system revolves around the different managers that make up the structure of the interactions between each object: InputManager, EnvironmentManager and MovementManager. All three of them, in order to keep on respecting the good practices when expanding a software project, inherit their main frame from the Generic Singleton object. In this section, we'll explain on detail what objects each of them supervises
 
 We'll start with the Input: Following the lines of correct design patterns, the inputs and its effects are connected using event-driven architecture, aiming at maximum independence between objects.
 
@@ -74,11 +88,17 @@ To end with this system, we needed one more Manager: one concerning the movement
 
 ###### SMCD: Dragon's Control and Movement System
 
-Up to this point, the player felt safe while climbing, only having to care not to trip on its foot. Or so he thought! We, developers, aren't so pious about our games, so a dragon is introduced to the game. Now, the knight must dodge its magic fireballs, otherwise it'll suffer a gory death. This constant chase-like mechanic is contained in the DragonHolder Script. In addition to this, to make its movement as realistic as possible, we had it keep its vertical position in a sway-like manner (), going up and down. This, together with the movement in the horizontal axis, made it much more realistic. Both these actions are encapsulated in the DragonMover Script
+Up to this point, the player felt safe while climbing, only having to care not to trip on its foot. Or so he thought! We, developers, aren't so pious about our games, so a dragon is introduced to the game. Now, the knight must dodge its magic fireballs, otherwise it'll suffer a gory death. This constant chase-like mechanic is contained in the DragonHolder Script. In addition to this, to make its movement as realistic as possible, we had it keep its vertical position in a sway-like manner (), going up and down. This, together with the movement in the horizontal axis, made it much more realistic. Both these actions are encapsulated in the DragonMover script
+
+At the beginning of the game, the player might not understand clearly how Fede's movement or the dragon work, so to make the learning curve a bit more attainable, the dragon (in a fit of empathy towards Fede, maybe) will but tease them, attacking with a fraction of its power. But the player must be aware, for the higher on the tower they get, the dragon will devote more of its will against Fede's objective. This, in the game, is achieved using the DragonStageManager script, which swaps between 3 different difficulties depending on the height. What, might the player ask, does this difficulty entail? Well, smart of them to ask, because they will have to deal with more fireballs, which will be fired at a higher rate. What a challenge!
 
 ###### SPE: Environment Properties System
 
-To make the game more challenging and entertaining, different kinds of platforms have been designed by our most creative members. Three different kinds will interact with the player: Ice, Fire and a Healing one. Each one will have different effects on the player (either changing its movement stats by communicating to the MovementManager or affecting the player's health via the HealthManager). They all inherit their functionalities from the BaseTerrain object, expanding its functionalities
+To make the game more challenging and entertaining, different kinds of platforms have been designed by our most creative members. Three different kinds will interact with the player: Ice, Fire and a Healing one. Each one will have different effects on the player (either changing its movement stats or affecting the player's health). They all inherit their functionalities from the BaseTerrain object, expanding its functionalities
+
+It must be noted that, in order to affect the player, the terrains (by means of their methods, either ModifyMovement or ModifyHealth), when colliding with another object (which, as makes sense in the context, may only be Fede), change directly Fede's stats. Given that nothing else can collide with the terrain, this is a correct and simple approach. In the case that more objects with the capacity of colliding should be designed, it can be easily changed as to know what type of object the other component is.
+
+###### SP: Perspectives System
 
 As mentioned previously, there are special *platforms:* InvisibleCube objects. Through the development, a problem arose: ANDREW DESCRIBEMELO. That's why the creation of invisible cubes was decided. Using them, we could ...
 
