@@ -112,8 +112,13 @@ In order for this to be a really good project for our clipboard, it must carry a
 2. Javier when the calls went later than 00 (no bench press mañana)
 
 ![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/GIFS%20-%20Javi/Angy.gif)
-   
+
+3. The Teams Call when we ask Andrew something (he's currently opening the File Explorer)
+
+![](![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/GIFS%20-%20Javi/Desert.gif))
+
 4. 
+  
 
 ## Contribute!
 
