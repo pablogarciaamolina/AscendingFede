@@ -15,7 +15,7 @@ public class FedeMovement : MonoBehaviour
     private EnvironmentManager eM;
 
     // Physiscs elements
-    private Rigidbody rb;
+    public Rigidbody rb;
     private BoxCollider cc;
 
     // Animation elements
@@ -25,8 +25,8 @@ public class FedeMovement : MonoBehaviour
 
     // Moving Direction
     private int directionIndex = 0;
-    private Vector3 direction;
-    private int lookingTo = 1; // 1 to look right, -1 to look left
+    public Vector3 direction;
+    public int lookingTo = 1; // 1 to look right, -1 to look left
 
     // Moving Input
     private int moveHorizontal = 0; // 1 for right, -1 for left. 0 no movement
