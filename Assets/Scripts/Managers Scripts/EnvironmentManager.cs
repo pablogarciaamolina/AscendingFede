@@ -344,7 +344,7 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
         }
         else if (quality == "heal")
         {
-            //
+            inv.AddComponent<HealingTerrain>();
         }
         else
         {
