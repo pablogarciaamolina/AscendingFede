@@ -12,19 +12,13 @@ public class FedeHealth : MonoBehaviour
     public FedeStats stats;
 
     private bool beingBurned = false;
+    private bool beingHealed = false;
 
-    
+
     private void Awake()
     {
         stats = gameObject.GetComponent<FedeStats>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //healthUpdate.Invoke(stats.health);
-    }
-
     private void OnParticleCollision(GameObject other)
     {
         ProcessHit(Constants.fireballDamage);
@@ -32,7 +26,8 @@ public class FedeHealth : MonoBehaviour
 
     private void ProcessHit(float damage)
     {
-       stats.health -= damage;
+        stats.health -= damage;
+        healthUpdate.Invoke(stats.health);
     }
 
     public void StartBurning()
@@ -52,13 +47,49 @@ public class FedeHealth : MonoBehaviour
         stats.isBurning = false;
     }
 
+    public void StartHealing()
+    {
+        beingHealed = true;
+
+        if (!stats.isHealing)
+        {
+            stats.isHealing = true;
+            StartCoroutine(Healing());
+        }
+    }
+
+    public void StopHealing()
+    {
+        beingHealed = false;
+        stats.isHealing = false;
+    }
+
     IEnumerator Burning()
     {
         while (beingBurned)
         {
             stats.health -= Constants.fireDamage;
+            healthUpdate.Invoke(stats.health);
 
             yield return new WaitForSeconds(Constants.rateFireDamage);
+        }
+    }
+
+    IEnumerator Healing()
+    {
+        while (beingHealed)
+        {
+            if (stats.health < Constants.initHealth)
+            {
+                stats.health += Constants.healthHealed;
+                healthUpdate.Invoke(stats.health);
+            }
+            else
+            {
+                stats.health = Constants.initHealth;
+            }
+
+            yield return new WaitForSeconds(Constants.healingRate);
         }
     }
 

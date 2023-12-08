@@ -17,6 +17,7 @@ public class BaseTerrain : MonoBehaviour
     public virtual void ModifyHealth(FedeHealth fedeHealth) 
     {
         fedeHealth.StopBurning();
+        fedeHealth.StopHealing();
     }
 
     protected virtual void OnCollisionEnter(Collision collision)

@@ -42,7 +42,7 @@ public static class Constants
     public const float dragonShootingAnimationDelay = .5f;
     /// Stages: Define the changes in dificulty for the Dragon
     public const int NumStages = 3;
-    public static List<float> Stages = new List<float> { 23f, 25f, 27f };
+    public static List<float> Stages = new List<float> { 40f, 70f, 100f };
     public const float rateOfFireballsChange = 2f;
     public const int numberOfFireballsChange = 2;
     /// Stats
@@ -56,5 +56,8 @@ public static class Constants
     ///Fire terrain
     public const float fireDamage = 15f;
     public const float rateFireDamage = 1.5f;
+    ///Healing Terrain
+    public const float healthHealed = 5f;
+    public const float healingRate = 1.5f;
 
 }
