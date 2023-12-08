@@ -13,7 +13,7 @@ public static class Constants
 
     // Physics constants
     public const int rotationAmount = -90;
-    public const float groundDetectionDistance = 0.2f;
+    public const float groundDetectionDistance = 0.01f;
     public static Vector3 Center = new Vector3(0f, 0f, 0f);
 
     // Player contants
@@ -22,7 +22,7 @@ public static class Constants
     /// Movements constants
     public static List<Vector3> Directions = new List<Vector3>() { new Vector3(1f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(-1f, 0f, 0f), new Vector3(0f, 0f, -1f) };
     /// Basic stats
-    public const float initMovingForce = 200f;
+    public const float initMovingForce = 300f;
     public const float initMaxHorizontalSpeed = 12f;
     public const float initJumpForce = 2500f;
     public const float initSpeedAfterStop = 0f;

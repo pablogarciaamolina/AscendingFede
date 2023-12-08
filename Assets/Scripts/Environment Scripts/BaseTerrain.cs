@@ -19,8 +19,9 @@ public class BaseTerrain : MonoBehaviour
         fedeHealth.StopBurning();
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
+        GameObject other = collision.gameObject;
         ModifyMovement(ref other.GetComponent<FedeMovement>().stats);
         ModifyHealth(other.GetComponent<FedeHealth>());
     }

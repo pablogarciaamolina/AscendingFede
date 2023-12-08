@@ -237,7 +237,7 @@ public class FedeMovement : MonoBehaviour
 
     private void ChangeDirection(int way)
     {
-        //StopVelocity();
+        StopVelocity();
 
         directionIndex = Mod(directionIndex + way, Constants.Directions.Count);
         direction = Constants.Directions[directionIndex];
