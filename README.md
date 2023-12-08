@@ -115,7 +115,7 @@ In order for this to be a really good project for our clipboard, it must carry a
 
 3. The Teams Call when we ask Andrew something (he's currently opening the File Explorer)
 
-![](![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/GIFS%20-%20Javi/Desert.gif))
+![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/GIFS%20-%20Javi/Desert.gif)
 
 4. 
   
