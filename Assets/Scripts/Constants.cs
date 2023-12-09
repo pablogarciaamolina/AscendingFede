@@ -34,12 +34,12 @@ public static class Constants
     public const float upCameraDistance = 2f;
 
     // Dragon constants
-    public const float flyingHeightAboveCharacter = 20f;
+    public const float flyingHeightAboveCharacter = 15f;
     public const float UpDownTime = 2f;
     public const float distanceUpDownFromCenter = 5f;
     public const float rotationSpeed = 5f;
     public const float multiplierTimeRotatingInOneSense = 1;
-    public const float fireballDamage = 10f;
+    public const float fireballDamage = 20f;
     public const float dragonShootingAnimationDelay = .5f;
     /// Stages: Define the changes in dificulty for the Dragon
     public const int NumStages = 3;

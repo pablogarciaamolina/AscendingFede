@@ -25,11 +25,6 @@ public class DragonFireBalls : MonoBehaviour
         StartCoroutine(ShootingFireballs());
     }
 
-    IEnumerator WaitSecondBeforeShooting()
-    {
-        yield return new WaitForSeconds(Constants.dragonShootingAnimationDelay);
-    }
-
     IEnumerator ShootingFireballs()
     {
         while (stats.shooting)
@@ -37,12 +32,13 @@ public class DragonFireBalls : MonoBehaviour
             // Find Fede's position
             Vector3 position = fede.transform.position;
 
-            // Orient particle system
-            systemOfParticles.transform.LookAt(position);
-
             // Emit fireball and animate
             _animator.SetTrigger("Shoot");
             yield return new WaitForSeconds(Constants.dragonShootingAnimationDelay);
+
+            // Orient particle system
+            systemOfParticles.transform.LookAt(position);
+            // Shoot
             systemOfParticles.Emit(stats.numFireballs);
 
             yield return new WaitForSeconds(stats.fireballRate);

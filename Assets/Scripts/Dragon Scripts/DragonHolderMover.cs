@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class DragonHolderMover : MonoBehaviour
 {
-    private MovementManager mvM;
-
-
     private bool rotating = false;
     private float timeRotatingInOneSense;
     private float currentTime = 0f;
@@ -16,15 +13,11 @@ public class DragonHolderMover : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        mvM = MovementManager.Instance;
         timeRotatingInOneSense = Random.Range(0, Constants.multiplierTimeRotatingInOneSense);
-
-        // Suscribe to event to change the height
-        mvM.CharacterChangeOfLevel += ChangeLevel;
     }
 
 // Update is called once per frame
-void Update()
+    void Update()
     {
         if (!rotating)
         {
@@ -66,35 +59,6 @@ void Update()
 
         rotating = false;
 
-    }
-
-    IEnumerator TransitionToLevel(float newLevel)
-    {
-
-        // Positions to transist between
-        /// initial
-        float initialHeight = transform.position.y;
-        /// target
-        float targetHeight = newLevel;
-
-        float elapsedTime = 0f;
-        while (elapsedTime < Constants.UpDownTime)
-        {
-            Vector3 initPosition = transform.position;
-            initPosition.y = initialHeight;
-            Vector3 finalPosition = transform.position;
-            finalPosition.y = targetHeight;
-
-            transform.position = Vector3.Lerp(initPosition, finalPosition, elapsedTime / Constants.UpDownTime);
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    private void ChangeLevel(float newHeight)
-    {
-        StartCoroutine(TransitionToLevel(newHeight + Constants.flyingHeightAboveCharacter));
     }
 
 }
