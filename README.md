@@ -22,9 +22,9 @@
 
 AscendingFede is a Unity-based game that revolves (quite literally) around a tower. Grounded on the indie **FEZ**, it expands the original's functionalities by applying the concepts learned throughout the subject *Paradigmas de Programación*. Set in a medieval environment, the game will have the player control a knight's movements in order to get to the tower's apex.
 
-Out of all the new exciting functionalities, we must highlight a system of power-ups and different kinds of platforms that modify the player's conditions (to put in the knowledge obtained on *OOP*). In addition to this, the player will have to deal with an extra factor; an enemy.
+Out of all the exciting functionalities, we must highlight a system of different platforms that modify the player's conditions (to put in the knowledge obtained on *OOP*). In addition to this, the player will have to deal with an extra factor; an enemy.
 
-Therefore, the player's quest will not be as easy as it seems. The enemy, an evil dragon (who represents our deepest fears as well as communism), will follow the player as it climbs the tower. While this happens, the dragon, pushed forward by wicked and ancient ideas (communism), will shoot fireballs (depicting the constant hunger its victims suffer) at the knight, aiming to throw him off his quest.
+Therefore, the player's quest will not be as easy as it seems. The enemy, an evil dragon, will follow Fede (our brave knight) as they climbs the tower. While this happens, the dragon, pushed forward by a wicked but unsparing determination, will shoot fireballs at the knight, aiming to throw Fede off theirquest.
 
 The last thing we have to mention is that the dragon, in order to make it even harder for the player, will constantly learn newer and smarter ways of following the player and shooting him (function implemented by means of *MLAgents*)
 
@@ -52,11 +52,9 @@ After making our camera mechanic, we took on the task of creating our character,
 
 Each frame, our player checks its vertical position, updating it, as well as checking the point at which it's looking (in order to make the movement afterwards reasonable). Finally, basing its movement on the inputs (the events it's subscribed to), it executes the necessary animations as well as the position-variables (applying a force).
 
-Eventos de cambio de nivel: grounded -> Nivel -> Input -> Movimiento 
+Each time the player jumps and lands on a new tile (once Fede's grounded), an event is raised so that both the dragon and the camera get on track with them. This will be more thoroughly explained in following sections. For now, we'll explain what criteria the program follows in order to know the player is stable on a tile. This is made through RayCasting such that, if the length of the rays casted towards a given surface is sufficiently small, Fede is considered to be grounded
 
-Grounding with RayCasting, so that if the distance is low,
-
-Health:
+Fede's health will be affected passively in two ways, as will be described in the SPE: either healing or burning (depending on the terrain Fede collides with). Additionally, the Fireballs will also damage them. In particular, the script FedeHealth deals with the effects in the health from the environment (Healing and burning).
 
 ###### SIPCP: Camera-player perspective integration system
 
@@ -64,15 +62,11 @@ While updating both the player's and camera's transforms, we ran into a problem 
 
 Using a LevelChanged Event, we were able to keep the camera and player's vertical position in lockstep. This functionality, scripted as a Coroutine checks the character's y position and executes an slerp in the TransitionToLevel interface
 
-Hablar de la rotación y cómo son independientes pero se entienden entre sí
-
 ###### SI: Inputs System
 
 As learned throughout the last weeks of the course, we are using an Event-Driven Architecture in our game. This comes in hand when managing the inputs. Given that our movements don't need to know what's happening to the inputs (they only need a command of what to do), we created three different events in the InputManager script (for moving, jumping and rotating). Employing the Input's GetAxis (for horizontal movement, which may be left-right) and GetKeyDown methods (for unique effects, such as jumping), we invoke the different subscribed objects. All the possible inputs are centralised in a Input Manager.
 
 Said this, some coding-connoiseurs (specially, our valued teachers, Arturo and Daniel) might question the management of inputs, in particular the ones concerning the player's movement and its relation with the camera's perspectives. In such case, we'd like to emphasize a nice feature of our program, that makes it much more intuitive to understand its structure. Given that we have 4 different perspectives for the camera, each perspective has a different direction for the *horizontal* movement (as can be checked in the Directions variable in the Constants script)
-
-Animaciones: Triggers
 
 ###### SIEO: Interaction between Objects System
 
@@ -100,9 +94,10 @@ It must be noted that, in order to affect the player, the terrains (by means of 
 
 ###### SP: Perspectives System
 
-As mentioned previously, there are special *platforms:* InvisibleCube objects. Through the development, a problem arose: ANDREW DESCRIBEMELO. That's why the creation of invisible cubes was decided. Using them, we could ...
+As mentioned previously, there are special *platforms:* InvisibleCube objects. Through the development, a problem arose: The perspective's mechanic, one of the main features of our game, made it so that all tiles were reachable even if they were on the other side of the tower, as they overlapped when projecting the 3D game into the 2D perspective. That's why the creation of invisible cubes was decided. Using them, we could make only the *visible* objects at each time reachable. At the start, using RayCasting, the manager gets the visible platforms from the actual perspective. Each time the player swaps the camera's view, the EnvironmentManager, if the player is on top of an ICube, moves Fede to the actual platform this ICube represents (making a movement untraceable by the player, as it's done in the dimension not currently manageable). Additionally, it sends an event to all the PlayableEnvironment objects in seen to form an ICube (if the player is not in the way, obviously). Taking this into account, the player (most of the time) will be playing in the ICubes representing the actual platforms.
 
 ## Project's ReWind
+
 In order for this to be a really good project for our clipboard, it must carry along some of the greatest moments we 3 had along its development. In this section, we'll do a brief review of those instants
 
 1. Pablo trying to decipher Andrew's code and commit's structure
@@ -116,9 +111,6 @@ In order for this to be a really good project for our clipboard, it must carry a
 3. The Teams Call when we ask Andrew something (he's currently opening the File Explorer)
 
 ![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/GIFS%20-%20Javi/Desert.gif)
-
-4. 
-  
 
 ## Contribute!
 
