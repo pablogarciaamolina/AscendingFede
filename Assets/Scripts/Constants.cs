@@ -25,7 +25,7 @@ public static class Constants
     public const float initMovingForce = 300f;
     public const float initMidAirMovingForce = 100f;
     public const float initMaxHorizontalSpeed = 12f;
-    public const float initJumpForce = 2500f;
+    public const float initJumpForce = 3000f;
     public const float initSpeedAfterStop = 0f;
     public const float initHealth = 220;
 
