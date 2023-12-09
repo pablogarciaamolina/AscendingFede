@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class MovementManager : GenericSingleton<MovementManager>
 {
     // Manager(s) instances
     private InputManager ipM;
-    ////private EnvironmentManager eM;
+    private EnvironmentManager eM;
 
     // Camera
     private GameObject Camera;
@@ -20,6 +22,9 @@ public class MovementManager : GenericSingleton<MovementManager>
     public event Action CameraStartRotation;
     public event Action CameraEndRotation;
     public event Action<float> CharacterChangeOfLevel;
+    public event Action ChangeInternalPlayerPosition;
+    public event Action<Vector3> ChangePlayerPosition;
+    public event Action<Vector3> SendPlayerPosition;
 
 
 
@@ -29,7 +34,7 @@ public class MovementManager : GenericSingleton<MovementManager>
 
         // Obtain Manger(s) istances
         ipM = InputManager.Instance;
-        ////eM = EnvironmentManager.Instance;
+        eM = EnvironmentManager.Instance;
 
         // Obtain Camera
         Camera = GameObject.Find("Camera");
@@ -45,8 +50,11 @@ public class MovementManager : GenericSingleton<MovementManager>
         cameraSwitcher.StartRotation += CameraStartRotating;
         cameraSwitcher.EndRotation += CameraDoneRotating;
 
-    }
+        eM.SendPositionEvent += AskPositionToPlayer;
+        eM.setPlayertoBlock += SetPlayerToDepthPetition;
 
+        SendPlayerPosition += eM.ManageSideChange;
+    }
 
     private void HorizontalInputEvent(int way)
     {
@@ -76,5 +84,20 @@ public class MovementManager : GenericSingleton<MovementManager>
     public void ManageCharacterLevelChange(float newLevel)
     {
         CharacterChangeOfLevel.Invoke(newLevel);
+    }
+
+    private void AskPositionToPlayer()
+    {
+        ChangeInternalPlayerPosition.Invoke();
+    }
+
+    private void SetPlayerToDepthPetition(Vector3 position)
+    {
+        ChangePlayerPosition.Invoke(position);
+    }
+
+    public void ManagePositionChange(Vector3 position)
+    {
+        SendPlayerPosition.Invoke(position);
     }
 }

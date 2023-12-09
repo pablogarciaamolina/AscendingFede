@@ -33,7 +33,6 @@ public class PlayableEnvironment : MonoBehaviour
     }
     private void setIsBlocking(Vector3 playerpos)
     {
-        // quitar break una vez rehecho !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         isBlocking = false;
         foreach (Transform t in this.gameObject.transform)
         {

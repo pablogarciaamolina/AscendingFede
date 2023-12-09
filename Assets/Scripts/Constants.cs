@@ -61,4 +61,8 @@ public static class Constants
     public const float healthHealed = 5f;
     public const float healingRate = 1.5f;
 
+    // Tower constants
+    public const int max_height = 110;
+    public const int max_width = 40;
+
 }

@@ -10,31 +10,29 @@ using static UnityEditor.PlayerSettings;
 public class EnvironmentManager : GenericSingleton<EnvironmentManager>
 {
     [SerializeField] private GameObject InvisibleCube;
-    [SerializeField] private Transform playableEnvironment; // places where you can step ( idealy a block ) 
-    [SerializeField] private Transform unplayableEnvironment; // tower
-
-    private bool StandingOnInvisibleCube;
-    private List<Transform> InvisibleList = new List<Transform>();
-
-    private int sideIndex = 0;
-    private List<Vector3> Directions = new List<Vector3>() { new Vector3(1f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(-1f, 0f, 0f), new Vector3(0f, 0f, -1f) };
-  
+    [SerializeField] private Transform playableEnvironment;
+    [SerializeField] private Transform unplayableEnvironment;
+   
+    // Visible Environment
     private List<List<GameObject>> visibleEnvSidesParents = new List<List<GameObject>>() { new List<GameObject>(), new List<GameObject>(), new List<GameObject>(), new List<GameObject>()};
     private List<List<Vector3>> visibleEnvSides = new List<List<Vector3>>() { new List<Vector3>(), new List<Vector3>(), new List<Vector3>(), new List<Vector3>() };
 
-    private int max_height = 110;
-    private int max_width = 40;
+    // InvisibleCubes
+    private List<Transform> InvisibleList = new List<Transform>();
+    private bool StandingOnInvisibleCube;
 
-    // create an event for changing VisualLevel when the camera chnges side and height (either) // when changing side DONE 
-
-    private InputManager ipM;
-
+    // Player
     private Vector3 actual_pos = Constants.playerInitialPosition;
 
     // Camera
     private GameObject Camera;
     private CameraSwitcher cameraSwitcher;
+    private int sideIndex = 0;
 
+    // Manager(s) instances
+    private InputManager ipM;
+
+    // Events
     public Action<Vector3> checkIsBlocking;
     public Action<int> checkSideIndex;
     public Action checkinviscubes;
@@ -46,13 +44,13 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
         base.Awake();
 
         StandingOnInvisibleCube = false;
-        ipM = InputManager.Instance; 
+
+        ipM = InputManager.Instance;
+        ipM.ToRotate += sideRotation;
 
         // Obtain Camera
         Camera = GameObject.Find("Camera");
         cameraSwitcher = Camera.GetComponent<CameraSwitcher>();
-
-        ipM.ToRotate += sideRotation;
         cameraSwitcher.EndRotation += CameraDoneRotating;
 
         foreach (Transform t in playableEnvironment.transform)
@@ -69,9 +67,7 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
     }
     public void Update()
     {
-        checkSideIndex.Invoke(sideIndex);
-        checkIsBlocking.Invoke(actual_pos);
-        checkinviscubes.Invoke();
+
     }
     private void OnInvisibleCube()
     {
@@ -84,10 +80,13 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
     private int Mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
     private void ChangeDirection(int way)
     {
-        sideIndex = Mod(sideIndex + way, Directions.Count);
+        sideIndex = Mod(sideIndex + way, Constants.Directions.Count);
     }
     private void sideRotation(int way)
     {
+        checkSideIndex.Invoke(sideIndex);
+        checkIsBlocking.Invoke(actual_pos);
+        checkinviscubes.Invoke();
         SendPositionEvent.Invoke();
         ChangePlayertoPlatform();
         ChangeDirection(way);
@@ -113,10 +112,10 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
     }
     private void ChangePlayertoPlatform()
     {
-        //when rotating change the player depth to the platform he is in instead of the invisible cube
+      
         if (StandingOnInvisibleCube)
         {
-            Vector3 playerposition = actual_pos; // get player position
+            Vector3 playerposition = actual_pos; 
 
             if (sideIndex == 0 || sideIndex == 2)
             {
@@ -191,39 +190,28 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
         actual_pos = playerposition;
         checkinviscubes.Invoke();
 
-        // move player to that position playerposition
+        
         setPlayertoBlock.Invoke(playerposition);
-    }
-    private bool checkforblock(Vector3 pos)
-    {
-        foreach (Vector3 posible_pos in visibleEnvSides[sideIndex])
-        {
-            if (Mathf.Abs(posible_pos.x - pos.x) <= 0.75 && Mathf.Abs(posible_pos.y - pos.y) <= 0.75 && Mathf.Abs(posible_pos.z - pos.z) <= 0.75)
-            {
-                return true;
-            }
-        }
-        return false;
     }
     private void createRayGrid()
     {
-        for (int i = -max_width; i < max_width; i += 1)
+        for (int i = -Constants.max_width; i < Constants.max_width; i += 1)
         {
-            for (int j = -10; j < max_height; j += 1)
+            for (int j = -10; j < Constants.max_height; j += 1)
             {
-                Vector3 coord = new Vector3(i, j, -2*max_width);
+                Vector3 coord = new Vector3(i, j, -2*Constants.max_width);
                 Ray ray = new Ray(coord, new Vector3(0f, 0f, 1f));
                 setVisibleEnvironment(ray, 0);
 
-                coord = new Vector3(-2*max_width, j, i);
+                coord = new Vector3(-2*Constants.max_width, j, i);
                 ray = new Ray(coord, new Vector3(1f, 0f, 0f));
                 setVisibleEnvironment(ray, 3);
 
-                coord = new Vector3(i, j, 2*max_width);
+                coord = new Vector3(i, j, 2*Constants.max_width);
                 ray = new Ray(coord, new Vector3(0f, 0f, -1f));
                 setVisibleEnvironment(ray, 2);
 
-                coord = new Vector3(2*max_width, j, i);
+                coord = new Vector3(2*Constants.max_width, j, i);
                 ray = new Ray(coord, new Vector3(-1f, 0f, 0f));
                 setVisibleEnvironment(ray, 1);
             }
@@ -231,7 +219,6 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
     }
     private void setVisibleEnvironment(Ray ray,int index)
     {
-        // añadir la posicion en vez del hijo
         RaycastHit hit;
         Vector3 pos;
         if (Physics.Raycast(ray, out hit))
@@ -239,7 +226,6 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
             if (hit.collider != null)
             {
                 pos = hit.point;
-                // revisar que funcione bien 
                 if (!visibleEnvSides[index].Contains(pos))
                 {
                     checkplayable(pos, index, hit.transform.gameObject);
@@ -316,7 +302,7 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
             }
             else if (pe.quality == "heal")
             {
-                //
+                inv.AddComponent<HealingTerrain>();
             }
             else
             {
@@ -329,32 +315,6 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
             sc.CollidedWithPlayer += OnInvisibleCube;
             sc.ColisionExit += NotOnInvisibleCube;
         }
-    }
-    
-    public void CreateInvisibleCube(Vector3 pos, string quality)
-    {
-        GameObject inv = Instantiate(InvisibleCube);
-        if (quality == "ice")
-        {
-            inv.AddComponent<IceTerrain>();
-        }
-        else if (quality == "fire")
-        {
-            inv.AddComponent<FireTerrain>();
-        }
-        else if (quality == "heal")
-        {
-            inv.AddComponent<HealingTerrain>();
-        }
-        else
-        {
-            inv.AddComponent<BaseTerrain>();
-        }
-        inv.transform.position = pos;
-        InvisibleList.Add(inv.transform);
-        InvisibleCube sc = inv.GetComponent<InvisibleCube>();
-        sc.CollidedWithPlayer += OnInvisibleCube;
-        sc.ColisionExit += NotOnInvisibleCube;
     }
     public void ManageSideChange(Vector3 position)
     {

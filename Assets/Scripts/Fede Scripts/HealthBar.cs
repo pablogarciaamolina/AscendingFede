@@ -26,7 +26,6 @@ public class HealthBar : MonoBehaviour
     void Update()
     {
         SetHealth(health);
-        Debug.Log(health);
     }
 
     private void SetHealth(float health)

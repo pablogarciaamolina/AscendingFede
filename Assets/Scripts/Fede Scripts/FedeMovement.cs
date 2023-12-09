@@ -71,13 +71,13 @@ public class FedeMovement : MonoBehaviour
         mvM.RotationMovementEvent += Rotate;
         mvM.CameraStartRotation += CameraBeginRotation;
         mvM.CameraEndRotation += CameraEndRotation;
-        // player depth movement
-        eM.SendPositionEvent += SendPosition;
-        eM.setPlayertoBlock += SetPlayerDepth;
+        // Player depth movement
+        mvM.ChangePlayerPosition += SetPlayerDepth;
+        mvM.ChangeInternalPlayerPosition += SendPosition;
 
         // Set suscriptions to events of this class
         LevelChangedEvent += mvM.ManageCharacterLevelChange;
-        SideChangeEvent += eM.ManageSideChange;
+        SideChangeEvent += mvM.ManagePositionChange;
 
         // Initialize direction
         direction = Constants.Directions[directionIndex];
