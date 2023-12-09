@@ -7,7 +7,7 @@ public class HealthBar : MonoBehaviour
 {
     [SerializeField] private FedeHealth fede;
     private Slider healthBar;
-    private float health;
+    private float health = Constants.initHealth;
 
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class HealthBar : MonoBehaviour
     void Update()
     {
         SetHealth(health);
+        Debug.Log(health);
     }
 
     private void SetHealth(float health)
