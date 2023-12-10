@@ -5,18 +5,18 @@
 ## Table Of Contents
 
 1. [Project Description](#project-description)
-2. [Development Partitions](#development-partitions)
-   - [SMC: Camera Movement System](#smc-camera-movement-system)
-   - [SMP: Player's Movement System](#smp-players-movement-system)
-   - [SIPCP: Camera-player Perspective Integration System](#sipcp-camera-player-perspective-integration-system)
-   - [SI: Inputs System](#si-inputs-system)
-   - [SIEO: Interaction between Objects System](#sieo-interaction-between-objects-system)
-   - [SMCD: Dragon's Control and Movement System](#smcd-dragons-control-and-movement-system)
-   - [SPE: Environment Properties System](#spe-envir)
-   - [SP:Perspectives System]
-3. [Installing and Running the Game](#installing-and-running-the-game)
-4. [How to play the Game](#how-to-use-the-game)
-5. [Contribute](#contribute)
+2. [How to use the Game](#how-to-use-the-game)
+3. [Project Report](#project-report)
+   [Development Partitions](#development-partitions)
+      x [SMC: Camera Movement System](#smc-camera-movement-system)
+      x [SMP: Player&#39;s Movement System](#smp-players-movement-system)
+      x [SIPCP: Camera-player Perspective Integration System](#sipcp-camera-player-perspective-integration-system)
+      x [SI: Inputs System](#si-inputs-system)
+      x [SIEO: Interaction between Objects System](#sieo-interaction-between-objects-system)
+      x [SMCD: Dragon&#39;s Control and Movement System](#smcd-dragons-control-and-movement-system)
+      x [SPE: Environment Properties System](#spe-environment-properties-system)
+      x [SP:Perspectives System](#sp-perspectives-system)
+5. [UML Structure](#uml-structure)
 6. [Credits](#credits)
 
 ## Project Description
