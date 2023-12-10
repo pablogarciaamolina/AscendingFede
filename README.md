@@ -1,6 +1,6 @@
 # AscendingFede
 
-![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/GIFS%20-%20Javi/Noice.gif)
+![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/Images/Portada.jpg)
 
 ## Table Of Contents
 
