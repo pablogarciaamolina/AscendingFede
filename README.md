@@ -109,6 +109,8 @@ As mentioned previously, there are special *platforms:* InvisibleCube objects. T
 
 Given the extent of the project, as well as the size of important classes like Fede and the Dragon, not all methods were included in their parts, only some of the (in our oppinon), most important to know how they work.
 
+![](https://github.com/pablogarciaamolina/AscendingFede/blob/main/Images/UML_Diagram.png)
+
 ## Credits
 
 This game was programmed as final project for the subject *Paradigmas de Programación* of the 3rd year of *Ingeniería Matemática e Inteligencia Artificial*, ICAI. As such, it was meant to wrap up all theory learnt throughtout the course. Created by Pablo García Molina, Andrés Martínez Fuentes and Fco. Javier Ríos Montes (aka Senador), this game is but the first of a list of projects done by these three fantastic people.
