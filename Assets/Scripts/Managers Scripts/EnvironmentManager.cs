@@ -1,11 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 
 public class EnvironmentManager : GenericSingleton<EnvironmentManager>
 {
@@ -115,15 +110,16 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
       
         if (StandingOnInvisibleCube)
         {
-            Vector3 playerposition = actual_pos; 
+            Vector3 playerposition = actual_pos;
+            Debug.Log(playerposition);
 
             if (sideIndex == 0 || sideIndex == 2)
             {
                 foreach (Vector3 pos in visibleEnvSides[sideIndex])
                 {
-                    if (pos.x - playerposition.x <= 0.9f && pos.y - playerposition.y <= 1)
+                    if (pos.x - playerposition.x <= 0.5f && pos.y - playerposition.y <= 0.5f)
                     {
-                        playerposition.z = pos.z;
+                        if (Math.Abs(pos.z) <= Math.Abs(playerposition.z)) { playerposition.z = pos.z; }
                     }
                 }
             }
@@ -131,7 +127,7 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
             {
                 foreach (Vector3 pos in visibleEnvSides[sideIndex])
                 {
-                    if (pos.z - playerposition.z <= 0.9f && pos.y - playerposition.y <= 1)
+                    if (pos.z - playerposition.z <= 0.5f && pos.y - playerposition.y <= 0.5f)
                     {
                         playerposition.x = pos.x;
                     }
