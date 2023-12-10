@@ -51,7 +51,7 @@ After making our camera mechanic, we took on the task of creating our character,
 
 One interesting feature of Fede's movement has to do with the perspectives we talked about in the SMC (and a problem we had from the beginning): Given that there are 4 different perspectives for the camera, a single set of inputs failed at moving Fede in the directions it should (as left-right changes mathematically depending on the perspective). That's why each point of view for the camera has a set of directions for the movement (contained in the Directions variable of the Constants script)
 
-Each time the player jumps and lands on a new tile (once Fede's grounded), an event is raised so that both the dragon and the camera get on track with them. This will be more thoroughly explained in following sections. For now, we'll explain what criteria the program follows in order to know the player is stable on a tile. This is made through RayCasting such that, if the length of the rays casted towards a given surface is sufficiently small, Fede is considered to be grounded
+Each time the player jumps and lands on a new tile (once Fede's grounded), an event is raised (LevelChanged in the UML), which is centralised through the MovementManager so that both the dragon and the camera get on track with them. This will be more thoroughly explained in following sections. For now, we'll explain what criteria the program follows in order to know the player is stable on a tile. This is made through RayCasting such that, if the length of the rays casted towards a given surface is sufficiently small, Fede is considered to be grounded
 
 ###### SIPCP: Camera-player perspective integration system
 
@@ -63,7 +63,7 @@ Given that both objects (Fede and the camera) rotate at the same time (but at di
 
 ###### SI: Inputs System
 
-As learned throughout the last weeks of the course, we are using an Event-Driven Architecture in our game. This comes in hand when managing the inputs. Given that our movements don't need to know what's happening to the inputs (they only need a command of what to do), we created three different events in the InputManager script (for moving, jumping and rotating). Employing the Input's GetAxis (for horizontal movement, which may be left-right) and GetKeyDown methods (for unique effects, such as jumping), we invoke the different subscribed objects. All the possible inputs are centralised in a Input Manager.
+As learned throughout the last weeks of the course, we are using an Event-Driven Architecture in our game. This comes in hand when managing the inputs. Given that our movements don't need to know what's happening to the inputs (they only need a command of what to do), we created three different events in the InputManager script (for moving, jumping and rotating). Employing the Input's GetAxis (for horizontal movement, which may be left-right) and GetKeyDown methods (for unique effects, such as jumping), we invoke the different subscribed objects.
 
 These inputs are different for each possible action. For instance, the jumps, as may be guessed, make up a boolean set (either jumping or not), while both rotations take -1 or 1 depending on the direction. Last, the horizontal movement takes 3 different values (-1, 0, 1) as Fede might remain still in his position.
 
@@ -75,11 +75,11 @@ Over the report, a term has and will be repeated that has been central around ou
 
 Returning to the matter in concern, this system revolves around three of the managers that make up the structure of the interactions between each object: InputManager, EnvironmentManager and MovementManager. All three of them, in order to keep on respecting the good practices when expanding a software project, inherit their main frame from the Generic Singleton object. In this section, we'll explain on detail what objects each of them supervises.
 
-We'll start with the Input: Following the lines of correct design patterns, the inputs and its effects are connected using event-driven architecture, aiming at maximum independence between objects.
+We'll start with the Input: Following the lines of correct design patterns, the inputs and its effects are connected using event-driven architecture *talking* with the MovementManager (MovementEvent in the UML), aiming at maximum independence between objects.
 
 EnvironmentManager, on the other hand, is a bit more complex. First of all, using the event-action pairs of the InputManager, it handles the correct movement of the player. At first glance, this might not make sense, but it should be noted that the player may not move into a platform whose level is not identical, for example. The different conditions in which the player moves around the world constrain its freedom, reason why this function exists. Additionally, there exists an special platform, InvisibleCube, which will be described in the SPE section. Apart from handling Fede's movement around its surroundings, this manager also tells the CameraSwapper what to do (based on the inputs).
 
-The last manager, MovementManager, deals with the movements: both of the Camera and Fede's. In it, the different events related with each input are invoked (Jumps and movements for Fede and Rotations for the camera)
+The last manager, MovementManager, deals with the movements: both of the Camera and Fede's. In it, the different events related with each input are dealt with (Jumps and movements for Fede and Rotations for the camera)
 
 The last part of this system was the possible situations arising between Fede and the objects around them, in particular fireballs and the different terrains. These relations are captured in the FedeHealth script, where the stats from the script FedeStats are changed, depending on the action that takes place. These possible actions are three: First, burn. When Fede comes in contact with a *FireTerrain*, a burning process is started (using Coroutines), updating Fede's health until he comes in contact with a normal tile, stopping this burning, or dies.
 
