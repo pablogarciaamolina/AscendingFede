@@ -111,7 +111,6 @@ public class EnvironmentManager : GenericSingleton<EnvironmentManager>
         if (StandingOnInvisibleCube)
         {
             Vector3 playerposition = actual_pos;
-            Debug.Log(playerposition);
 
             if (sideIndex == 0 || sideIndex == 2)
             {
